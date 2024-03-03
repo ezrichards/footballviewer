@@ -52,6 +52,9 @@
 		79298CA62B942B1300BF5789 /* Richards-EthanP02 */ = {
 			isa = PBXGroup;
 			children = (
+				79298CB82B942BF400BF5789 /* View Models */,
+				79298CB72B942BF100BF5789 /* Data Models */,
+				79298CB62B942BED00BF5789 /* Views */,
 				79298CA72B942B1300BF5789 /* Richards_EthanP02App.swift */,
 				79298CA92B942B1300BF5789 /* ContentView.swift */,
 				79298CAB2B942B1400BF5789 /* Assets.xcassets */,
@@ -67,6 +70,27 @@
 				79298CAE2B942B1400BF5789 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		79298CB62B942BED00BF5789 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		79298CB72B942BF100BF5789 /* Data Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Data Models";
+			sourceTree = "<group>";
+		};
+		79298CB82B942BF400BF5789 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
