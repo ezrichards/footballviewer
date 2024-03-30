@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  Richards-EthanP02
+//  footballviewer
 //
-//  Created by Ethan Richards on 3/2/24.
+//  Created by Ethan Richards on 3/29/24.
 //
 
 import SwiftUI
@@ -19,4 +19,6 @@ struct ContentView: View {
     }
 }
 
-// Project: Family Tree app
+#Preview {
+    ContentView()
+}
