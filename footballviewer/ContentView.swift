@@ -19,6 +19,4 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//https://www.api-football.com/documentation-v3#section/Authentication/API-SPORTS-Account
