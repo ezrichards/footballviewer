@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+
     var body: some View {
         VStack {
             Text("Hello, world!").padding()
             
             Button("Query Players") {
-                
+                let viewModel = ViewModel()
+                Task {
+                    let result = await viewModel.loadPlayers()
+                    print(result)
+                }
             }
             Button("Query Teams") {
                 
