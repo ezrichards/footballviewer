@@ -13,5 +13,9 @@ struct footballviewerApp: App {
         WindowGroup {
             ContentView()
         }
+        
+        Settings {
+            PreferencesView()
+        }
     }
 }

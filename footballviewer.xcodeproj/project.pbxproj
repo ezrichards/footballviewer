@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		790C5B632BC245950068F05F /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B622BC245950068F05F /* PreferencesView.swift */; };
+		790C5B662BC246470068F05F /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B652BC246470068F05F /* PreferencesController.swift */; };
+		790C5B692BC246B10068F05F /* UserDefaults_apiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */; };
 		791263702BBBA410003C78AF /* StatisticsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912636F2BBBA410003C78AF /* StatisticsTable.swift */; };
 		791263722BBBA490003C78AF /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791263712BBBA490003C78AF /* ViewModel.swift */; };
 		791263742BBBA4F4003C78AF /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791263732BBBA4F4003C78AF /* Player.swift */; };
@@ -19,12 +22,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		790C5B622BC245950068F05F /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		790C5B652BC246470068F05F /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
+		790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults_apiKey.swift; sourceTree = "<group>"; };
 		7912636F2BBBA410003C78AF /* StatisticsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTable.swift; sourceTree = "<group>"; };
 		791263712BBBA490003C78AF /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		791263732BBBA4F4003C78AF /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		791263752BBBA4FF003C78AF /* League.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = League.swift; sourceTree = "<group>"; };
 		791263772BBBA508003C78AF /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
-		79192D512BB7918C00151D6F /* footballviewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = footballviewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		79192D512BB7918C00151D6F /* FootballViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79192D542BB7918C00151D6F /* footballviewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = footballviewerApp.swift; sourceTree = "<group>"; };
 		79192D562BB7918C00151D6F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		79192D582BB7918D00151D6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -43,6 +49,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		790C5B642BC2463C0068F05F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				790C5B652BC246470068F05F /* PreferencesController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		790C5B672BC246960068F05F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		7912636C2BBBA377003C78AF /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				7912636F2BBBA410003C78AF /* StatisticsTable.swift */,
+				790C5B622BC245950068F05F /* PreferencesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -80,7 +103,7 @@
 		79192D522BB7918C00151D6F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				79192D512BB7918C00151D6F /* footballviewer.app */,
+				79192D512BB7918C00151D6F /* FootballViewer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,6 +113,8 @@
 			children = (
 				79192D542BB7918C00151D6F /* footballviewerApp.swift */,
 				79192D562BB7918C00151D6F /* ContentView.swift */,
+				790C5B642BC2463C0068F05F /* Controllers */,
+				790C5B672BC246960068F05F /* Extensions */,
 				7912636C2BBBA377003C78AF /* Data Models */,
 				7912636D2BBBA382003C78AF /* View Models */,
 				7912636E2BBBA387003C78AF /* Views */,
@@ -111,9 +136,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		79192D502BB7918C00151D6F /* footballviewer */ = {
+		79192D502BB7918C00151D6F /* FootballViewer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 79192D602BB7918D00151D6F /* Build configuration list for PBXNativeTarget "footballviewer" */;
+			buildConfigurationList = 79192D602BB7918D00151D6F /* Build configuration list for PBXNativeTarget "FootballViewer" */;
 			buildPhases = (
 				79192D4D2BB7918C00151D6F /* Sources */,
 				79192D4E2BB7918C00151D6F /* Frameworks */,
@@ -123,9 +148,9 @@
 			);
 			dependencies = (
 			);
-			name = footballviewer;
+			name = FootballViewer;
 			productName = footballviewer;
-			productReference = 79192D512BB7918C00151D6F /* footballviewer.app */;
+			productReference = 79192D512BB7918C00151D6F /* FootballViewer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -156,7 +181,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				79192D502BB7918C00151D6F /* footballviewer */,
+				79192D502BB7918C00151D6F /* FootballViewer */,
 			);
 		};
 /* End PBXProject section */
@@ -179,10 +204,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				79192D572BB7918C00151D6F /* ContentView.swift in Sources */,
+				790C5B692BC246B10068F05F /* UserDefaults_apiKey.swift in Sources */,
 				79192D552BB7918C00151D6F /* footballviewerApp.swift in Sources */,
 				791263782BBBA508003C78AF /* Team.swift in Sources */,
+				790C5B662BC246470068F05F /* PreferencesController.swift in Sources */,
 				791263722BBBA490003C78AF /* ViewModel.swift in Sources */,
 				791263742BBBA4F4003C78AF /* Player.swift in Sources */,
+				790C5B632BC245950068F05F /* PreferencesView.swift in Sources */,
 				791263762BBBA4FF003C78AF /* League.swift in Sources */,
 				791263702BBBA410003C78AF /* StatisticsTable.swift in Sources */,
 			);
@@ -375,7 +403,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79192D602BB7918D00151D6F /* Build configuration list for PBXNativeTarget "footballviewer" */ = {
+		79192D602BB7918D00151D6F /* Build configuration list for PBXNativeTarget "FootballViewer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79192D612BB7918D00151D6F /* Debug */,
