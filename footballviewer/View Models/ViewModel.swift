@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct GroceryProduct: Codable {
     var name: String
@@ -14,7 +15,9 @@ struct GroceryProduct: Codable {
 }
 
 struct ViewModel {
-    
+
+    @State var preferencesController = PreferencesController()
+
     func loadPlayers() async {
 //        Task {
             // TODO wrap this function in a task and do and await as needed
@@ -25,18 +28,37 @@ struct ViewModel {
             }
 
         print("Test")
-        do {
-            var urlSession = try? await URLSession.shared.dataTask(with: url) { (data, response, error) in
+//        do {
+            var request = URLRequest(url: URL(string: "https://v3.football.api-sports.io/leagues")!,timeoutInterval: Double.infinity)
+        request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
+            request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
+            request.httpMethod = "GET"
+            
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                guard let data = data else {
+                  print("ERROR:", String(describing: error))
+                  return
+                }
                 
-                print(data)
-                print(response)
-                print(error)
+                guard data.count != 0 else {
+                    print("Zero bytes of data")
+                    return
+                }
+                
+                let decoder = JSONDecoder()
+                do {
+                    let newData = try decoder.decode(Json4Swift_Base.self, from: data)
+                    print("DATA:", newData.response?[0])
+                } catch {
+                    print("error decoding")
+                }
             }
+            task.resume()
 
-        }
-        catch {
-            print("ERROR")
-        }
+//        }
+//        catch {
+//            print("ERROR")
+//        }
         print("AFTER")
 
             // resource used: https://developer.apple.com/documentation/foundation/jsondecoder
