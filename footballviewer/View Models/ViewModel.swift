@@ -15,6 +15,11 @@ struct ViewModel {
     func loadPlayers() async {
         
     }
+
+    func loadSquads() async {
+        
+    }
+    
     
     func loadTeams() async {
         
@@ -41,7 +46,7 @@ struct ViewModel {
             // reference: https://developer.apple.com/documentation/foundation/jsondecoder
             let decoder = JSONDecoder()
             do {
-                let newData = try decoder.decode(Json4Swift_Base.self, from: data)
+                let newData = try decoder.decode(LeagueJson.self, from: data)
                 print("DATA:", newData.response?[0])
             } catch {
                 print("error decoding")
