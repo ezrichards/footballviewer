@@ -9,15 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
 
+    let viewModel = ViewModel()
+    
     var body: some View {
         VStack {
-            Text("Hello, world!").padding()
-            
             Button("Query Players") {
-                let viewModel = ViewModel()
                 Task {
-                    let result = await viewModel.loadPlayers()
-                    print(result)
+                    await viewModel.loadLeagues()
                 }
             }
             Button("Query Teams") {
