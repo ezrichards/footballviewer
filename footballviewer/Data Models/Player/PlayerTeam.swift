@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Team : Codable {
+struct PlayerTeam : Codable {
 	let id : Int?
 	let name : String?
 	let logo : String?

@@ -13,20 +13,20 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Substitutes : Codable {
-	let in : Int?
+	let inPlayers : Int?
 	let out : Int?
 	let bench : Int?
 
 	enum CodingKeys: String, CodingKey {
 
-		case in = "in"
+		case inPlayers = "inPlayers"
 		case out = "out"
 		case bench = "bench"
 	}
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		in = try values.decodeIfPresent(Int.self, forKey: .in)
+        inPlayers = try values.decodeIfPresent(Int.self, forKey: .inPlayers)
 		out = try values.decodeIfPresent(Int.self, forKey: .out)
 		bench = try values.decodeIfPresent(Int.self, forKey: .bench)
 	}

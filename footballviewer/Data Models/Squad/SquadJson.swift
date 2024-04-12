@@ -33,11 +33,11 @@ struct SquadJson : Codable {
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
 		get = try values.decodeIfPresent(String.self, forKey: .get)
-		parameters = try values.decodeIfPresent(Parameters.self, forKey: .parameters)
+		parameters = try values.decodeIfPresent(SquadParameters.self, forKey: .parameters)
 		errors = try values.decodeIfPresent([String].self, forKey: .errors)
 		results = try values.decodeIfPresent(Int.self, forKey: .results)
-		paging = try values.decodeIfPresent(Paging.self, forKey: .paging)
-		response = try values.decodeIfPresent([Response].self, forKey: .response)
+		paging = try values.decodeIfPresent(SquadPaging.self, forKey: .paging)
+		response = try values.decodeIfPresent([SquadResponse].self, forKey: .response)
 	}
 
 }
