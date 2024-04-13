@@ -16,6 +16,7 @@ struct footballviewerApp: App {
         
         Settings {
             PreferencesView()
+                .padding()
         }
     }
 }

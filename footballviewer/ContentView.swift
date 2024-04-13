@@ -37,7 +37,6 @@ struct ContentView: View {
         HStack {
             VStack {
                 Text("Leagues")
-                // reference: https://www.linkedin.com/pulse/keypath-swift-usage-sergey-leschev/
                 if let leagueJson = viewModel.leagues {
                     if let response = leagueJson.response {
                         // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-let-users-pick-options-from-a-menu
@@ -55,32 +54,8 @@ struct ContentView: View {
                                 Text("Selected league id: \(id)")
                             }
                         }
-
-//                        ScrollView {
-//                            ForEach(response) { response in
-//                                Text(response.league?.name ?? "undefined")
-//                            }
-//                        }
-
-                        //                    Table(response) {
-                        //                        let name = response[keyPath: \Response.league?.name]
-                        
-                        //                        TableColumn("Test", value: name as! KeyPath<Response, String>)
-                        //                    }
-                        //                    .padding()
                     }
                 }
-                
-                //            Table(students, sortOrder: $sortOrder) {
-                //                TableColumn("Student Name", value: \.name)
-                //                TableColumn("Student ID", value: \.studentID)
-                //                TableColumn("Student Score", value: \.overAllScore) {
-                //                    Text(String(format: "%.2f", $0.overAllScore))
-                //                }
-                //                TableColumn("Letter Grade", value: \.letterGrade) {
-                //                    Text($0.letterGrade.rawValue)
-                //                }
-                //            }
             }
             GraphView()
         }
