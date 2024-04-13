@@ -159,14 +159,10 @@ class ViewModel: ObservableObject {
               return
             }
             
-//            let jsonString = String(data: data, encoding: .utf8)
-//            print(jsonString)
-            
             // reference: https://developer.apple.com/documentation/foundation/jsondecoder
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
-                print("DATA:", newData.response![0])
 
                 // MARK: APP SUPPORT STUFF
                 let fileManager = FileManager.default
@@ -193,7 +189,7 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     
-    func loadLeaguesFile() {
+    func loadLeaguesFromFile() {
         let fileManager = FileManager.default
         let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("leagues.json")
@@ -205,15 +201,6 @@ class ViewModel: ObservableObject {
         
         let decoder = JSONDecoder()
         let newData = try? decoder.decode(LeagueJson.self, from: contentData)
-
         self.leagues = newData
-
-//        if let responses = newData?.response {
-//            for response in responses {
-//                if let name: String = response.league?.name {
-//                    print(name)
-//                }
-//            }
-//        }
     }
 }

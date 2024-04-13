@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct GraphView: View {
+    
+    @State private var playerOne = ""
+    @State private var playerTwo = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Player One Selection: \(playerOne)")
+            Text("Player Two Selection: \(playerTwo)")
+        }
     }
-}
-
-#Preview {
-    GraphView()
 }
