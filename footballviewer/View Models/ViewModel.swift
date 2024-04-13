@@ -75,7 +75,6 @@ class ViewModel: ObservableObject {
         }
         task.resume()
     }
-    
 
     func loadTeam(withId id: String) async {
         // https://v3.football.api-sports.io/teams?id=33
@@ -108,7 +107,7 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     
-    func loadTeams(withLeagueId id: String, withSeasonId seasonId: String) async {
+    func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
 //        // https://v3.football.api-sports.io/teams?league=39&season=2023
 //        guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
 //            print("Could not get URL!")
