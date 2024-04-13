@@ -25,8 +25,8 @@ struct ContentView: View {
             }
             Button("Query Leagues") {
                 Task {
-                    await viewModel.loadLeagues();
-//                    viewModel.loadLeaguesFile();
+//                    await viewModel.loadLeagues();
+                    viewModel.loadLeaguesFile();
                 }
             }
 
@@ -38,7 +38,6 @@ struct ContentView: View {
                             Text(response.league?.name ?? "undefined")
                         }
                     }
-
 //                    Table(response) {
 //                        let name = response[keyPath: \Response.league?.name]
                         

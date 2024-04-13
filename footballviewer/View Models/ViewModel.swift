@@ -166,12 +166,8 @@ class ViewModel: ObservableObject {
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
-//                newData = try decoder.decode(LeagueJson.self, from: data)
                 print("DATA:", newData.response![0])
-//                return newData
 
-//                self.leagues = newData
-                
                 // MARK: APP SUPPORT STUFF
                 let fileManager = FileManager.default
                 let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
@@ -182,7 +178,6 @@ class ViewModel: ObservableObject {
                     let encodedData = try encoder.encode(newData)
                     do {
                         try encodedData.write(to: documentURL)
-                        print(encodedData)
                     }
                     catch {
                         print("error while writing encoded data: ", error)
@@ -191,21 +186,8 @@ class ViewModel: ObservableObject {
                 catch {
                     print("error while encoding data:", error)
                 }
-                print("SUCCESSFUL WRITE AT", documentURL)
-                
-            } catch let DecodingError.dataCorrupted(context) {
-                print(context)
-            } catch let DecodingError.keyNotFound(key, context) {
-                print("Key '\(key)' not found:", context.debugDescription)
-                print("codingPath:", context.codingPath)
-            } catch let DecodingError.valueNotFound(value, context) {
-                print("Value '\(value)' not found:", context.debugDescription)
-                print("codingPath:", context.codingPath)
-            } catch let DecodingError.typeMismatch(type, context)  {
-                print("Type '\(type)' mismatch:", context.debugDescription)
-                print("codingPath:", context.codingPath)
             } catch {
-                print("error: ", error)
+                print("error writing: ", error)
             }
         }
         task.resume()
@@ -214,19 +196,10 @@ class ViewModel: ObservableObject {
     func loadLeaguesFile() {
         let fileManager = FileManager.default
         let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        
         let documentURL = appSupportURL.appendingPathComponent("leagues.json")
         
-        print(documentURL)
-        
-        //        print(appSupportURL)
-        
-        // MARK: TODO convert this code to use application support
-        guard let filePath = Bundle.main.path(forResource: "data/leagues", ofType: "json") else {
-            return
-        }
-        
-        guard let contentData = FileManager.default.contents(atPath: filePath) else {
+        guard let contentData = try? Data(contentsOf: documentURL) else {
+            print("Error opening file at:", documentURL.description)
             return
         }
         
@@ -235,12 +208,12 @@ class ViewModel: ObservableObject {
 
         self.leagues = newData
 
-        if let responses = newData?.response {
-            for response in responses {
-                if let name: String = response.league?.name {
-                    print(name)
-                }
-            }
-        }
+//        if let responses = newData?.response {
+//            for response in responses {
+//                if let name: String = response.league?.name {
+//                    print(name)
+//                }
+//            }
+//        }
     }
 }
