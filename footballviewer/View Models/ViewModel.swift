@@ -159,8 +159,8 @@ class ViewModel: ObservableObject {
               return
             }
             
-            let jsonString = String(data: data, encoding: .utf8)
-            print(jsonString)
+//            let jsonString = String(data: data, encoding: .utf8)
+//            print(jsonString)
             
             // reference: https://developer.apple.com/documentation/foundation/jsondecoder
             let decoder = JSONDecoder()
@@ -170,6 +170,29 @@ class ViewModel: ObservableObject {
                 print("DATA:", newData.response![0])
 //                return newData
 
+//                self.leagues = newData
+                
+                // MARK: APP SUPPORT STUFF
+                let fileManager = FileManager.default
+                let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+                let documentURL = appSupportURL.appendingPathComponent("leagues.json")
+                
+                let encoder = JSONEncoder()
+                do {
+                    let encodedData = try encoder.encode(newData)
+                    do {
+                        try encodedData.write(to: documentURL)
+                        print(encodedData)
+                    }
+                    catch {
+                        print("error while writing encoded data: ", error)
+                    }
+                }
+                catch {
+                    print("error while encoding data:", error)
+                }
+                print("SUCCESSFUL WRITE AT", documentURL)
+                
             } catch let DecodingError.dataCorrupted(context) {
                 print(context)
             } catch let DecodingError.keyNotFound(key, context) {
@@ -189,7 +212,16 @@ class ViewModel: ObservableObject {
     }
     
     func loadLeaguesFile() {
+        let fileManager = FileManager.default
+        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         
+        let documentURL = appSupportURL.appendingPathComponent("leagues.json")
+        
+        print(documentURL)
+        
+        //        print(appSupportURL)
+        
+        // MARK: TODO convert this code to use application support
         guard let filePath = Bundle.main.path(forResource: "data/leagues", ofType: "json") else {
             return
         }
@@ -200,53 +232,15 @@ class ViewModel: ObservableObject {
         
         let decoder = JSONDecoder()
         let newData = try? decoder.decode(LeagueJson.self, from: contentData)
-//                newData = try decoder.decode(LeagueJson.self, from: data)
-//        print("DATA:", newData?.response!)
-        
+
         self.leagues = newData
-    
-        
+
         if let responses = newData?.response {
             for response in responses {
-                
-//                let name = leagues[keyPath: "name"]
-//                print()
-                
-//                response.league
-                
-//                let nameKeyPath = \response.
-                
                 if let name: String = response.league?.name {
                     print(name)
                 }
-                
-//                print(response.league?.name!)
             }
         }
-
-        
-        
-        
-
- 
-//        content = String(data: contentData, encoding: .utf8)
-        
-//        let fileURL = Bundle.main.url(forResource: "leagues", withExtension: "json")!
-//        print(fileURL)
-//        
-//        let data1 = try? Data(contentsOf: fileURL)
-//        print(data1)
-//        
-//        guard let url = URL(string: "/users/ethanrichards/Documents/footballviewer/data/leagues.json") else {
-//            return
-//        }
-//        
-//        let data = try? Data(contentsOf: url)
-//        
-//        print(data)
-        
-        
-        
     }
-    
 }
