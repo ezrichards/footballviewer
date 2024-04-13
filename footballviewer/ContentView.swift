@@ -52,10 +52,11 @@ struct ContentView: View {
                         Picker("", selection: $selection) {
                             ForEach(response) { response in
                                 if let countryName = response.country?.name {
-                                    Text("\(response.league?.name ?? "undefined") (\(countryName))" ?? "undefined").tag(response.league)
+                                    Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
                                 }
                             }
                         }
+                        .frame(maxWidth: 200)
                         .pickerStyle(.menu)
                         .onChange(of: selection) {
                             print("selection changed")
