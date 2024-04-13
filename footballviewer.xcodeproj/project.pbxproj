@@ -52,11 +52,11 @@
 		792396A02BC2FAE7003DC58A /* Coverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792396982BC2FAE7003DC58A /* Coverage.swift */; };
 		792396A12BC2FAE7003DC58A /* Seasons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792396992BC2FAE7003DC58A /* Seasons.swift */; };
 		792396A22BC2FAE7003DC58A /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7923969A2BC2FAE7003DC58A /* Country.swift */; };
-		792396A32BC2FAE7003DC58A /* CountryJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7923969B2BC2FAE7003DC58A /* CountryJson.swift */; };
 		792396A42BC2FAE7003DC58A /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7923969C2BC2FAE7003DC58A /* Response.swift */; };
 		7972E1082BC9E87D001B1205 /* PlayerLeague.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E1072BC9E87D001B1205 /* PlayerLeague.swift */; };
 		7972E10A2BC9EABE001B1205 /* PlayerTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E1092BC9EABD001B1205 /* PlayerTeam.swift */; };
 		7972E10C2BC9EAED001B1205 /* SquadTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E10B2BC9EAED001B1205 /* SquadTeam.swift */; };
+		7972E11E2BCA29CB001B1205 /* LeagueJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E11D2BCA29CB001B1205 /* LeagueJson.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,11 +107,11 @@
 		792396982BC2FAE7003DC58A /* Coverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coverage.swift; sourceTree = "<group>"; };
 		792396992BC2FAE7003DC58A /* Seasons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seasons.swift; sourceTree = "<group>"; };
 		7923969A2BC2FAE7003DC58A /* Country.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
-		7923969B2BC2FAE7003DC58A /* CountryJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryJson.swift; sourceTree = "<group>"; };
 		7923969C2BC2FAE7003DC58A /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		7972E1072BC9E87D001B1205 /* PlayerLeague.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerLeague.swift; sourceTree = "<group>"; };
 		7972E1092BC9EABD001B1205 /* PlayerTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTeam.swift; sourceTree = "<group>"; };
 		7972E10B2BC9EAED001B1205 /* SquadTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquadTeam.swift; sourceTree = "<group>"; };
+		7972E11D2BCA29CB001B1205 /* LeagueJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueJson.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +131,7 @@
 				7923969A2BC2FAE7003DC58A /* Country.swift */,
 				792396982BC2FAE7003DC58A /* Coverage.swift */,
 				792396962BC2FAE7003DC58A /* Fixtures.swift */,
-				7923969B2BC2FAE7003DC58A /* CountryJson.swift */,
+				7972E11D2BCA29CB001B1205 /* LeagueJson.swift */,
 				792396952BC2FAE7003DC58A /* League.swift */,
 				792396972BC2FAE7003DC58A /* Paging.swift */,
 				7923969C2BC2FAE7003DC58A /* Response.swift */,
@@ -351,6 +351,7 @@
 			files = (
 				790B96A12BC6E9EE00BD52FD /* SquadResponse.swift in Sources */,
 				790B96912BC6E8D700BD52FD /* Goals.swift in Sources */,
+				7972E11E2BCA29CB001B1205 /* LeagueJson.swift in Sources */,
 				79192D572BB7918C00151D6F /* ContentView.swift in Sources */,
 				790B96A72BC6EA3200BD52FD /* SquadParameters.swift in Sources */,
 				790B96842BC6E8D700BD52FD /* Statistics.swift in Sources */,
@@ -382,7 +383,6 @@
 				790B96962BC6E99100BD52FD /* PlayerResponse.swift in Sources */,
 				790B96A02BC6E9EE00BD52FD /* SquadPaging.swift in Sources */,
 				7923969D2BC2FAE7003DC58A /* League.swift in Sources */,
-				792396A32BC2FAE7003DC58A /* CountryJson.swift in Sources */,
 				790B968E2BC6E8D700BD52FD /* Games.swift in Sources */,
 				792396A22BC2FAE7003DC58A /* Country.swift in Sources */,
 				790B96972BC6E99100BD52FD /* PlayerPaging.swift in Sources */,
