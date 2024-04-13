@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Seasons : Codable {
+struct Seasons : Codable, Identifiable {
+    let id = UUID()
 	let year : Int?
 	let start : String?
 	let end : String?

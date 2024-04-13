@@ -8,10 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct ViewModel {
+class ViewModel: ObservableObject {
 
     @State var preferencesController = PreferencesController()
 
+    @Published var leagues: LeagueJson?
+    
     func loadPlayers(withId id: String, withSeasonId seasonId: String) async {
         // https://v3.football.api-sports.io/players?id=909&season=2023
         guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
@@ -144,14 +146,13 @@ struct ViewModel {
         }
 
         // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
+        // reference: https://stackoverflow.com/questions/35272712/where-do-i-specify-reloadignoringlocalcachedata-for-nsurlsession-in-swift-2
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
-//        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
+        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
-        
-//        var newData: LeagueJson = nil
-        
+
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
               print("ERROR:", String(describing: error))
@@ -200,13 +201,33 @@ struct ViewModel {
         let decoder = JSONDecoder()
         let newData = try? decoder.decode(LeagueJson.self, from: contentData)
 //                newData = try decoder.decode(LeagueJson.self, from: data)
-        print("DATA:", newData?.response!)
+//        print("DATA:", newData?.response!)
         
-//        if let responses = newData?.response {
-//            for response in responses {
-//                print(response)
-//            }
-//        }
+        self.leagues = newData
+    
+        
+        if let responses = newData?.response {
+            for response in responses {
+                
+//                let name = leagues[keyPath: "name"]
+//                print()
+                
+//                response.league
+                
+//                let nameKeyPath = \response.
+                
+                if let name: String = response.league?.name {
+                    print(name)
+                }
+                
+//                print(response.league?.name!)
+            }
+        }
+
+        
+        
+        
+
  
 //        content = String(data: contentData, encoding: .utf8)
         

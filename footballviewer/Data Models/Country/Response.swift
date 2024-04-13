@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Response : Codable {
+struct Response : Codable, Identifiable {
+    let id = UUID()
 	let league : League?
 	let country : Country?
 	let seasons : [Seasons]?
