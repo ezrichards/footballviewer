@@ -25,7 +25,8 @@ struct ContentView: View {
             }
             Button("Query Leagues") {
                 Task {
-                    await viewModel.loadLeagues();
+//                    await viewModel.loadLeagues();
+                    await viewModel.loadLeaguesFile();
                 }
             }
             
