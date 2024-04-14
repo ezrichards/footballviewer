@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-
+    
     @StateObject var viewModel = ViewModel()
     @State private var selection: League? = nil
     var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var teamTwoSelection: Team? = nil
     @State private var teamOne: SquadResponse? = nil
     @State private var teamTwo: SquadResponse? = nil
-
+    
     var body: some View {
         VStack {
             HStack {
@@ -102,17 +102,23 @@ struct ContentView: View {
 //                                print(newValue?.name)
                                 teamOne = response.first(where: { $0.team?.name == newValue?.name })
                                 
-//                                Task {
-//                                    viewModel.loadPlayers(withId: teamOne.id, withSeasonId: season)
-//                                }
+//                                callFunc()
                                 
+                            }
+                            // reference: https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
+                            .onReceive([self.$teamOneSelection].publisher.first()) { value in
+                                if let teamOneSelection {
+                                    Task {
+                                        await viewModel.loadSquad(teamId: teamOneSelection.id ?? 0)
+                                    }
+                                }
                             }
                         }
                     }
 
 
                     ScrollView {
-                        if let players = teamOne?.players {
+                        if let players = viewModel.teamOnePlayers {
                             ForEach(players) { player in
                                 Text(player.name ?? "undefined")
                             }
