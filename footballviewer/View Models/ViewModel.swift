@@ -18,6 +18,10 @@ class ViewModel: ObservableObject {
     @Published var leagues: LeagueJson?
     @Published var squads: SquadJson?
     @Published var teamOnePlayers: [Players]?
+    
+    init() {
+        loadLeaguesFromFile()
+    }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async {
         // https://v3.football.api-sports.io/players?id=909&season=2023
@@ -103,8 +107,7 @@ class ViewModel: ObservableObject {
             print("Error with URLSession:", error)
         }
     }
-    
-    // MARK: TODO convert this function to run on the main actor
+
     func loadLeagues() async {
         guard let url = URL(string: "https://v3.football.api-sports.io/leagues") else {
             print("Could not get URL!")
@@ -117,12 +120,8 @@ class ViewModel: ObservableObject {
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-              print("ERROR:", String(describing: error))
-              return
-            }
-
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
@@ -142,14 +141,16 @@ class ViewModel: ObservableObject {
                         print("error while writing encoded data: ", error)
                     }
                 }
-                catch {
-                    print("error while encoding data:", error)
+                
+                await MainActor.run {
+                    self.leagues = newData
                 }
             } catch {
-                print("error writing: ", error)
+                print("Error decoding squad:", error)
             }
+        } catch {
+            print("Error with URLSession:", error)
         }
-        task.resume()
     }
     
     func loadLeaguesFromFile() {

@@ -4,43 +4,37 @@
 //
 //  Created by Ethan Richards on 3/29/24.
 //
+//  References:
+//  https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
+//  https://stackoverflow.com/questions/61668356/onreceive-in-swiftui-view-causes-infinite-loop
+//  https://developer.apple.com/documentation/swiftui/binding/wrappedvalue
+//
 
 import SwiftUI
 
 struct ContentView: View {
     
+    var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
     @StateObject var viewModel = ViewModel()
     @State private var selection: League? = nil
-    var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
-    
     @State private var teamOneSelection: Team? = nil
     @State private var teamTwoSelection: Team? = nil
     @State private var teamOne: SquadResponse? = nil
     @State private var teamTwo: SquadResponse? = nil
     
+    func callTask() {
+        print("called")
+        Task {
+            await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
+        }
+    }
+    
     var body: some View {
         VStack {
-            HStack {
-                Button("Query Players") {
-                    //                Task {
-                    //                    await viewModel.loadPlayers(withId:withSeasonId:)
-                    //                }
-                }
-                Button("Fetch teams") {
-                    //                Task {
-                    //                    await viewModel.loadTeams(withLeagueId:withSeasonId:)
-                    //                }
-                    
-                    Task {
-                        if let selection = selection {
-                            await viewModel.loadTeams(withLeagueId: selection.id!, withSeasonId: season)
-                        }
-                    }
-                }
-                Button("Query Leagues") {
-                    Task {
-                        //                    await viewModel.loadLeagues();
-                        viewModel.loadLeaguesFromFile();
+            Button("Fetch teams") {
+                Task {
+                    if let selection = selection {
+                        await viewModel.loadTeams(withLeagueId: selection.id!, withSeasonId: season)
                     }
                 }
             }
@@ -63,7 +57,7 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: 200)
                         .pickerStyle(.menu)
-
+                        
                         if let selection = selection {
                             if let name = selection.name, let id = selection.id {
                                 Text("Selected league: \(name)")
@@ -73,52 +67,15 @@ struct ContentView: View {
                     }
                     
                     Text("Teams")
-                    if let squads = viewModel.squads {
-                        ScrollView {
-                            ForEach(squads.response!) { squad in
-                                Text(squad.team?.name ?? "undefined")
-                            }
-                        }
-                        
-                        // team 1 selection
-                        if let response = squads.response {
-                            Picker("Team One:", selection: $teamOneSelection) {
-                                ForEach(response) { response in
-                                    if let team = response.team {
-                                        Text(team.name ?? "undefined").tag(response.team)
-                                    }
-                                }
-                            }
-                            .frame(maxWidth: 200)
-                            .pickerStyle(.menu)
-                            .onChange(of: teamOneSelection) { oldValue, newValue in
-//                                print(oldValue?.name)
-//                                print(newValue?.name)
-                                teamOne = response.first(where: { $0.team?.name == newValue?.name })
-                            }
-                            // reference: https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
-                            // reference: https://stackoverflow.com/questions/61668356/onreceive-in-swiftui-view-causes-infinite-loop
-                            .onReceive([self.$teamOneSelection].publisher.first()) { value in
-                                
-                                print(value.name != teamOneSelection.name)
-                                
-                                if let teamOneSelection {
-                                    Task {
-                                        await viewModel.loadSquad(teamId: teamOneSelection.id ?? 0)
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    teamPicker
 
-                    ScrollView {
-                        if let players = viewModel.teamOnePlayers {
+                    if let players = viewModel.teamOnePlayers {
+                        ScrollView {
                             ForEach(players) { player in
                                 Text(player.name ?? "undefined")
                             }
                         }
                     }
-                    
                     
                     // team 2 selection
                     
@@ -127,5 +84,42 @@ struct ContentView: View {
 //            GraphView()
         }
         .frame(maxHeight: .infinity)
+    }
+    
+    @ViewBuilder
+    var teamPicker: some View {
+        if let squads: SquadJson = viewModel.squads {
+            if let response = squads.response {
+                ScrollView {
+                    ForEach(response) { squad in
+                        if let team = squad.team {
+                            Text(team.name ?? "undefined")
+                        }
+                    }
+                }
+                
+                // team 1 selection
+                Picker("Team One:", selection: $teamOneSelection) {
+                    ForEach(response) { response in
+                        if let team = response.team {
+                            Text(team.name ?? "undefined").tag(response.team)
+                        }
+                    }
+                }
+                .frame(maxWidth: 200)
+                .pickerStyle(.menu)
+                .onChange(of: teamOneSelection) { oldValue, newValue in
+                    teamOne = response.first(where: { $0.team?.name == newValue?.name })
+                }
+                .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
+                    print(newValue.wrappedValue)
+                    print(teamOneSelection)
+                    print(teamOne)
+//                    if newValue.wrappedValue != teamOne?.team {
+                        callTask()
+//                    }
+                }
+            }
+        }
     }
 }
