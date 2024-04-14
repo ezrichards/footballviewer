@@ -95,12 +95,13 @@ struct ContentView: View {
 //                                print(oldValue?.name)
 //                                print(newValue?.name)
                                 teamOne = response.first(where: { $0.team?.name == newValue?.name })
-                                
-//                                callFunc()
-                                
                             }
                             // reference: https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
+                            // reference: https://stackoverflow.com/questions/61668356/onreceive-in-swiftui-view-causes-infinite-loop
                             .onReceive([self.$teamOneSelection].publisher.first()) { value in
+                                
+                                print(value.name != teamOneSelection.name)
+                                
                                 if let teamOneSelection {
                                     Task {
                                         await viewModel.loadSquad(teamId: teamOneSelection.id ?? 0)
@@ -109,7 +110,6 @@ struct ContentView: View {
                             }
                         }
                     }
-
 
                     ScrollView {
                         if let players = viewModel.teamOnePlayers {

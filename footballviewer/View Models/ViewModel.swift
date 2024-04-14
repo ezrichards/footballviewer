@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Richards on 4/1/24.
 //
+//  References Used In File:
+//  https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
+//  https://stackoverflow.com/questions/35272712/where-do-i-specify-reloadignoringlocalcachedata-for-nsurlsession-in-swift-2
+//
 
 import Foundation
 import SwiftUI
@@ -11,53 +15,35 @@ import SwiftUI
 class ViewModel: ObservableObject {
 
     @State var preferencesController = PreferencesController()
-
     @Published var leagues: LeagueJson?
     @Published var squads: SquadJson?
     @Published var teamOnePlayers: [Players]?
-    
-    // TODO this is loadPlayerById
+
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async {
-        
-        print("querying https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)")
-        
         // https://v3.football.api-sports.io/players?id=909&season=2023
         guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
             print("Could not get URL!")
             return
         }
-        
-        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
+
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                print("ERROR:", String(describing: error))
-                return
-            }
-            
-            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(PlayerJson.self, from: data)
-                
-//                print(newData)
-                
-//                print("DATA:", newData.response?[0])
-                print("TEST:")
-                for response in newData.response! {
-                    print(response)
-                }
-                
+                print(newData)
             } catch {
-                print("error decoding", error)
+                print("Error decoding squad:", error)
             }
+        } catch {
+            print("Error with URLSession:", error)
         }
-        task.resume()
     }
 
     func loadSquad(teamId id: Int) async {
@@ -67,7 +53,6 @@ class ViewModel: ObservableObject {
             return
         }
 
-        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
@@ -97,45 +82,35 @@ class ViewModel: ObservableObject {
             return
         }
 
-        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
-        
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-              print("ERROR:", String(describing: error))
-              return
-            }
 
-            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(SquadJson.self, from: data)
-//                print("DATA:", newData.response?[0])
-//                print("TEST:")
-//                for response in newData.response! {
-//                    print(response)
-//                }
-//                
-                self.squads = newData
+                await MainActor.run {
+                    self.squads = newData
+                }
             } catch {
-                print("error decoding")
+                print("Error decoding squad:", error)
             }
+        } catch {
+            print("Error with URLSession:", error)
         }
-        task.resume()
     }
     
+    // MARK: TODO convert this function to run on the main actor
     func loadLeagues() async {
         guard let url = URL(string: "https://v3.football.api-sports.io/leagues") else {
             print("Could not get URL!")
             return
         }
 
-        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
-        // reference: https://stackoverflow.com/questions/35272712/where-do-i-specify-reloadignoringlocalcachedata-for-nsurlsession-in-swift-2
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
@@ -147,8 +122,7 @@ class ViewModel: ObservableObject {
               print("ERROR:", String(describing: error))
               return
             }
-            
-            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
+
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
