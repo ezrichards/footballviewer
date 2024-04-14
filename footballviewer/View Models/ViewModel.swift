@@ -13,6 +13,7 @@ class ViewModel: ObservableObject {
     @State var preferencesController = PreferencesController()
 
     @Published var leagues: LeagueJson?
+    @Published var squads: SquadJson?
     
     func loadPlayers(withId id: String, withSeasonId seasonId: String) async {
         // https://v3.football.api-sports.io/players?id=909&season=2023
@@ -108,34 +109,47 @@ class ViewModel: ObservableObject {
     }
     
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
-//        // https://v3.football.api-sports.io/teams?league=39&season=2023
-//        guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
-//            print("Could not get URL!")
-//            return
-//        }
-//
-//        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
-//        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
-//        request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
-//        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
-//        request.httpMethod = "GET"
-//        
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            guard let data = data else {
-//              print("ERROR:", String(describing: error))
-//              return
-//            }
-//            
-//            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
-//            let decoder = JSONDecoder()
-//            do {
-//                let newData = try decoder.decode(TeamJson.self, from: data)
+        // https://v3.football.api-sports.io/teams?league=39&season=2023
+        guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
+            print("Could not get URL!")
+            return
+        }
+
+        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
+        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
+        request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
+        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
+        request.httpMethod = "GET"
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+
+        print("RUN REQUEST")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+              print("ERROR:", String(describing: error))
+              return
+            }
+            
+            print("RAN DATATASK")
+            
+            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
+            let decoder = JSONDecoder()
+            do {
+                let newData = try decoder.decode(TeamJson.self, from: data)
 //                print("DATA:", newData.response?[0])
-//            } catch {
-//                print("error decoding")
-//            }
-//        }
-//        task.resume()
+                
+                print("TEST:")
+                for response in newData.response! {
+                    print(response)
+                }
+                
+//                self.squads = newData.response?[0]
+                
+            } catch {
+                print("error decoding")
+            }
+        }
+        task.resume()
     }
     
     func loadLeagues() async {

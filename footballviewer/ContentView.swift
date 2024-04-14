@@ -11,7 +11,7 @@ struct ContentView: View {
 
     @StateObject var viewModel = ViewModel()
     @State private var selection: League? = nil
-    var season = 2023
+    var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
     
     var body: some View {
         VStack {
@@ -76,7 +76,6 @@ struct ContentView: View {
             }
             GraphView()
         }
-        
         .frame(maxHeight: .infinity)
     }
 }

@@ -16,6 +16,8 @@ class PreferencesController {
         }
     }
     
+//    save league settings after last one
+    
     init() {
         self.apiKey = UserDefaults.standard.value(forKey: UserDefaults.apiKey) as? String ?? ""
     }
