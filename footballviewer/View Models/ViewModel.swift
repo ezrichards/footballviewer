@@ -22,11 +22,11 @@ class ViewModel: ObservableObject {
         loadLeaguesFromFile()
     }
 
-    func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async {
+    func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
         // https://v3.football.api-sports.io/players?id=909&season=2023
         guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
             print("Could not get URL!")
-            return
+            return nil
         }
 
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
@@ -41,12 +41,15 @@ class ViewModel: ObservableObject {
             do {
                 let newData = try decoder.decode(PlayerJson.self, from: data)
                 print(newData)
+                return newData
+                
             } catch {
                 print("Error decoding squad:", error)
             }
         } catch {
             print("Error with URLSession:", error)
         }
+        return nil
     }
 
     func loadSquad(teamId id: Int) async -> [Players] {

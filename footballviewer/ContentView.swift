@@ -25,8 +25,15 @@ struct ContentView: View {
     @State private var teamOnePlayers: [Players]?
     @State private var teamTwoPlayers: [Players]?
     
-    @State private var selectedPlayerOne: Players? = nil
+    @State private var selectedPlayerOne: Int? = nil
     @State private var selectedPlayerTwo: Players? = nil
+    
+    // stat players from viewmodel
+    @State private var playerOne: Players? = nil
+    @State private var playerTwo: Players? = nil
+    
+    // MARK: TODO testing for stats
+    @State private var playerOneTest: PlayerJson? = nil
     
     var body: some View {
         HStack {
@@ -79,21 +86,50 @@ struct ContentView: View {
                             .frame(maxWidth: 200)
                             .pickerStyle(.menu)
                             .onChange(of: teamOneSelection) {
-                                toggled.toggle()
-                            }
-                            .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
-                                if toggled {
-                                    Task {
-                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
-                                    }
-                                    toggled.toggle()
+                                // MARK: TODO fix others to use onChange
+//                                toggled.toggle()
+                                Task {
+                                    teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
+//                                    selectedPlayerOne = teamOnePlayers![0]
                                 }
                             }
+//                            .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
+//                                if toggled {
+//                                    Task {
+//                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
+//                                    }
+//                                    toggled.toggle()
+//                                }
+//                            }
                             
                             if let players = teamOnePlayers {
                                 ScrollView {
                                     ForEach(players) { player in
                                         Text(player.name ?? "undefined")
+                                    }
+                                }
+                                
+                                // player one selection
+                                Picker("Player One:", selection: $selectedPlayerOne) {
+                                    ForEach(players) { player in
+                                        if let name = player.name {
+                                            // MARK: TODO add player numbers to dropdowns
+                                            Text("\(name)").tag(player.id)
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: 200)
+                                .pickerStyle(.menu)
+                                .onChange(of: selectedPlayerOne) { oldValue, newValue in
+//                                    print("OLD:", oldValue)
+//                                    print("NEW:", newValue)
+                                    
+                                    playerOne = teamOnePlayers?.first(where: { $0.id == selectedPlayerOne })
+                                    
+                                    if let playerId = playerOne?.id {
+                                        Task {
+                                            playerOneTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
+                                        }
                                     }
                                 }
                             }
@@ -129,9 +165,6 @@ struct ContentView: View {
                             }
                         }
                     }
-                    
-                    // team 2 selection
-                    
                 }
             }
 //            GraphView()
