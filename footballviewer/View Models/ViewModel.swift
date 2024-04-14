@@ -67,10 +67,12 @@ class ViewModel: ObservableObject {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
+                print("LOADING SQUAD")
                 let newData = try decoder.decode(SquadJson.self, from: data)
                 await MainActor.run {
                     self.teamOnePlayers = newData.response?.first?.players
                 }
+                print(self.teamOnePlayers)
             } catch {
                 print("Error decoding squad:", error)
             }

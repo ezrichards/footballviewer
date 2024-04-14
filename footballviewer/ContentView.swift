@@ -8,6 +8,7 @@
 //  https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
 //  https://stackoverflow.com/questions/61668356/onreceive-in-swiftui-view-causes-infinite-loop
 //  https://developer.apple.com/documentation/swiftui/binding/wrappedvalue
+//  https://stackoverflow.com/questions/60617914/onreceive-string-publisher-lead-to-infinite-loop
 //
 
 import SwiftUI
@@ -21,6 +22,9 @@ struct ContentView: View {
     @State private var teamTwoSelection: Team? = nil
     @State private var teamOne: SquadResponse? = nil
     @State private var teamTwo: SquadResponse? = nil
+    
+    @State private var toggled: Bool = false
+//    @State private var teamOnePlayers: [Players]?
     
     func callTask() {
         print("called")
@@ -61,13 +65,43 @@ struct ContentView: View {
                         if let selection = selection {
                             if let name = selection.name, let id = selection.id {
                                 Text("Selected league: \(name)")
-                                Text("Selected league id: \(id)")
                             }
                         }
                     }
                     
                     Text("Teams")
-                    teamPicker
+                    if let squads: SquadJson = viewModel.squads {
+                        if let response = squads.response {
+                            ScrollView {
+                                ForEach(response) { squad in
+                                    if let team = squad.team {
+                                        Text(team.name ?? "undefined")
+                                    }
+                                }
+                            }
+                            
+                            // team 1 selection
+                            Picker("Team One:", selection: $teamOneSelection) {
+                                ForEach(response) { response in
+                                    if let team = response.team {
+                                        Text(team.name ?? "undefined").tag(response.team)
+                                    }
+                                }
+                            }
+                            .frame(maxWidth: 200)
+                            .pickerStyle(.menu)
+                            .onChange(of: teamOneSelection) {
+                                toggled.toggle()
+                            }
+                            .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
+                                if toggled {
+                                    print("TEST")
+                                    callTask()
+                                    toggled.toggle()
+                                }
+                            }
+                        }
+                    }
 
                     if let players = viewModel.teamOnePlayers {
                         ScrollView {
@@ -84,42 +118,5 @@ struct ContentView: View {
 //            GraphView()
         }
         .frame(maxHeight: .infinity)
-    }
-    
-    @ViewBuilder
-    var teamPicker: some View {
-        if let squads: SquadJson = viewModel.squads {
-            if let response = squads.response {
-                ScrollView {
-                    ForEach(response) { squad in
-                        if let team = squad.team {
-                            Text(team.name ?? "undefined")
-                        }
-                    }
-                }
-                
-                // team 1 selection
-                Picker("Team One:", selection: $teamOneSelection) {
-                    ForEach(response) { response in
-                        if let team = response.team {
-                            Text(team.name ?? "undefined").tag(response.team)
-                        }
-                    }
-                }
-                .frame(maxWidth: 200)
-                .pickerStyle(.menu)
-                .onChange(of: teamOneSelection) { oldValue, newValue in
-                    teamOne = response.first(where: { $0.team?.name == newValue?.name })
-                }
-                .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
-                    print(newValue.wrappedValue)
-                    print(teamOneSelection)
-                    print(teamOne)
-//                    if newValue.wrappedValue != teamOne?.team {
-                        callTask()
-//                    }
-                }
-            }
-        }
     }
 }
