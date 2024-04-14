@@ -17,7 +17,6 @@ class ViewModel: ObservableObject {
     @State var preferencesController = PreferencesController()
     @Published var leagues: LeagueJson?
     @Published var squads: SquadJson?
-    @Published var teamOnePlayers: [Players]?
     
     init() {
         loadLeaguesFromFile()
@@ -50,11 +49,11 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func loadSquad(teamId id: Int) async {
+    func loadSquad(teamId id: Int) async -> [Players] {
         // https://v3.football.api-sports.io/players/squads?team=33
         guard let url = URL(string: "https://v3.football.api-sports.io/players/squads?team=\(id)") else {
             print("Could not get URL!")
-            return
+            return []
         }
 
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
@@ -67,18 +66,15 @@ class ViewModel: ObservableObject {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
-                print("LOADING SQUAD")
                 let newData = try decoder.decode(SquadJson.self, from: data)
-                await MainActor.run {
-                    self.teamOnePlayers = newData.response?.first?.players
-                }
-                print(self.teamOnePlayers)
+                return newData.response?.first?.players ?? []
             } catch {
                 print("Error decoding squad:", error)
             }
         } catch {
             print("Error with URLSession:", error)
         }
+        return []
     }
 
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {

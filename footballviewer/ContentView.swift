@@ -20,30 +20,15 @@ struct ContentView: View {
     @State private var selection: League? = nil
     @State private var teamOneSelection: Team? = nil
     @State private var teamTwoSelection: Team? = nil
-    @State private var teamOne: SquadResponse? = nil
-    @State private var teamTwo: SquadResponse? = nil
-    
     @State private var toggled: Bool = false
-//    @State private var teamOnePlayers: [Players]?
+    @State private var teamTwoToggled: Bool = false
+    @State private var teamOnePlayers: [Players]?
+    @State private var teamTwoPlayers: [Players]?
     
-    func callTask() {
-        print("called")
-        Task {
-            await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
-        }
-    }
+    @State private var selectedPlayerOne: Players? = nil
+    @State private var selectedPlayerTwo: Players? = nil
     
     var body: some View {
-        VStack {
-            Button("Fetch teams") {
-                Task {
-                    if let selection = selection {
-                        await viewModel.loadTeams(withLeagueId: selection.id!, withSeasonId: season)
-                    }
-                }
-            }
-            .padding()
-        }
         HStack {
             VStack {
                 Text("Leagues")
@@ -61,11 +46,14 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: 200)
                         .pickerStyle(.menu)
-                        
-                        if let selection = selection {
-                            if let name = selection.name, let id = selection.id {
-                                Text("Selected league: \(name)")
+                        .onChange(of: selection) {
+                            Task {
+                                await viewModel.loadTeams(withLeagueId: selection?.id! ?? 0, withSeasonId: season)
                             }
+                        }
+                        
+                        if let selection = selection, let name = selection.name {
+                            Text("Selected league: \(name)")
                         }
                     }
                     
@@ -95,18 +83,49 @@ struct ContentView: View {
                             }
                             .onReceive([self.$teamOneSelection].publisher.first()) { newValue in
                                 if toggled {
-                                    print("TEST")
-                                    callTask()
+                                    Task {
+                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
+                                    }
                                     toggled.toggle()
                                 }
                             }
-                        }
-                    }
-
-                    if let players = viewModel.teamOnePlayers {
-                        ScrollView {
-                            ForEach(players) { player in
-                                Text(player.name ?? "undefined")
+                            
+                            if let players = teamOnePlayers {
+                                ScrollView {
+                                    ForEach(players) { player in
+                                        Text(player.name ?? "undefined")
+                                    }
+                                }
+                            }
+                            
+                            // team 2 selection
+                            Picker("Team Two:", selection: $teamTwoSelection) {
+                                ForEach(response) { response in
+                                    if let team = response.team {
+                                        Text(team.name ?? "undefined").tag(response.team)
+                                    }
+                                }
+                            }
+                            .frame(maxWidth: 200)
+                            .pickerStyle(.menu)
+                            .onChange(of: teamTwoSelection) {
+                                teamTwoToggled.toggle()
+                            }
+                            .onReceive([self.$teamTwoSelection].publisher.first()) { newValue in
+                                if teamTwoToggled {
+                                    Task {
+                                        teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
+                                    }
+                                    teamTwoToggled.toggle()
+                                }
+                            }
+                            
+                            if let players = teamTwoPlayers {
+                                ScrollView {
+                                    ForEach(players) { player in
+                                        Text(player.name ?? "undefined")
+                                    }
+                                }
                             }
                         }
                     }
@@ -117,6 +136,6 @@ struct ContentView: View {
             }
 //            GraphView()
         }
-        .frame(maxHeight: .infinity)
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
