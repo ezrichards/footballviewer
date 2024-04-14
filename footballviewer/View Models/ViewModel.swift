@@ -8,10 +8,8 @@
 import Foundation
 import SwiftUI
 
-//@MainActor
 class ViewModel: ObservableObject {
 
-    // MARK: TODO investigate this: https://stackoverflow.com/questions/61108947/swiftui-make-sure-to-publish-values-from-the-main-thread-via-operators-like-r
     @State var preferencesController = PreferencesController()
 
     @Published var leagues: LeagueJson?
@@ -76,63 +74,22 @@ class ViewModel: ObservableObject {
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-              print("ERROR:", String(describing: error))
-              return
-            }
-
-            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(SquadJson.self, from: data)
-//                print("DATA:", newData.response?[0])
-                
-//                print("TEST SQUAD:")
-//                for response in newData.response! {
-//                    print(response)
-//                }
-//
-                self.teamOnePlayers = newData.response?.first?.players
-                
+                await MainActor.run {
+                    self.teamOnePlayers = newData.response?.first?.players
+                }
             } catch {
-                print("error decoding", error)
+                print("Error decoding squad:", error)
             }
+        } catch {
+            print("Error with URLSession:", error)
         }
-        task.resume()
     }
 
-//    func loadTeam(withId id: String) async {
-//        // https://v3.football.api-sports.io/teams?id=33
-//        guard let url = URL(string: "https://v3.football.api-sports.io/teams?id=\(id)") else {
-//            print("Could not get URL!")
-//            return
-//        }
-//
-//        // reference: https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
-//        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
-//        request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
-//        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
-//        request.httpMethod = "GET"
-//        
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            guard let data = data else {
-//              print("ERROR:", String(describing: error))
-//              return
-//            }
-//            
-//            // reference: https://developer.apple.com/documentation/foundation/jsondecoder
-//            let decoder = JSONDecoder()
-//            do {
-//                let newData = try decoder.decode(TeamJson.self, from: data)
-//                print("DATA:", newData.response?[0])
-//            } catch {
-//                print("error decoding")
-//            }
-//        }
-//        task.resume()
-//    }
-    
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
         // https://v3.football.api-sports.io/teams?league=39&season=2023
         guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {

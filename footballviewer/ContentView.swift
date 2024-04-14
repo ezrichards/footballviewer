@@ -63,13 +63,7 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: 200)
                         .pickerStyle(.menu)
-                        .onChange(of: selection) {
-                            print("selection changed")
-                            
-                            // query team or check if it exists?
-                        }
-                    
-                        
+
                         if let selection = selection {
                             if let name = selection.name, let id = selection.id {
                                 Text("Selected league: \(name)")
