@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct SquadResponse : Codable {
+struct SquadResponse : Codable, Identifiable {
+    let id = UUID()
 	let team : Team?
 	let players : [Players]?
 

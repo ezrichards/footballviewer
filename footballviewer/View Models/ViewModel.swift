@@ -15,7 +15,7 @@ class ViewModel: ObservableObject {
     @Published var leagues: LeagueJson?
     @Published var squads: SquadJson?
     
-    func loadPlayers(withId id: String, withSeasonId seasonId: String) async {
+    func loadPlayers(withTeamId id: String, withSeasonId seasonId: String) async {
         // https://v3.football.api-sports.io/players?id=909&season=2023
         guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
             print("Could not get URL!")
@@ -121,30 +121,24 @@ class ViewModel: ObservableObject {
         request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         request.cachePolicy = .reloadIgnoringLocalCacheData
-
-        print("RUN REQUEST")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
               print("ERROR:", String(describing: error))
               return
             }
-            
-            print("RAN DATATASK")
-            
+
             // reference: https://developer.apple.com/documentation/foundation/jsondecoder
             let decoder = JSONDecoder()
             do {
-                let newData = try decoder.decode(TeamJson.self, from: data)
+                let newData = try decoder.decode(SquadJson.self, from: data)
 //                print("DATA:", newData.response?[0])
-                
-                print("TEST:")
-                for response in newData.response! {
-                    print(response)
-                }
-                
-//                self.squads = newData.response?[0]
-                
+//                print("TEST:")
+//                for response in newData.response! {
+//                    print(response)
+//                }
+//                
+                self.squads = newData
             } catch {
                 print("error decoding")
             }

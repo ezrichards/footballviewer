@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Players : Codable {
+struct Players : Codable, Identifiable {
 	let id : Int?
 	let name : String?
 	let age : Int?
