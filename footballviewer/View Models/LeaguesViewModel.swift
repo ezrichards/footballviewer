@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+@Observable
+class LeaguesViewModel {
+    
+    private var selectedLeague: League? = nil
+    
+}
