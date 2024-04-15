@@ -6,8 +6,6 @@
 //
 //  References:
 //  https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
-//  https://stackoverflow.com/questions/61668356/onreceive-in-swiftui-view-causes-infinite-loop
-//  https://developer.apple.com/documentation/swiftui/binding/wrappedvalue
 //  https://stackoverflow.com/questions/60617914/onreceive-string-publisher-lead-to-infinite-loop
 //  https://developer.apple.com/documentation/swiftui/building-layouts-with-stack-views
 //
@@ -55,15 +53,17 @@ struct ContentView: View {
                             }
                             .frame(maxWidth: 250)
                             .pickerStyle(.menu)
-                            .onChange(of: selection) {
+                            .onChange(of: selection) { // MARK: TODO put this under didSet on a viewmodel
                                 Task {
                                     await viewModel.loadTeams(withLeagueId: selection?.id! ?? 0, withSeasonId: season)
                                 }
                                 print("LAST LEAGUE:", preferencesController.lastLeague)
-                                preferencesController.saveLastLeague(withId: String(describing: selection?.id!))
+                                preferencesController.saveLastLeague(withId: selection?.id ?? 0)
                             }
+                            
 //                            if let selection = selection, let name = selection.name {
 //                                Text("Selected league: \(name)")
+//                                AsyncImage(url: URL(string: selection.logo!))
 //                            }
                         }
                         
@@ -253,4 +253,10 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity)
     }
+    
+//    @ViewBuilder
+//    var someasdfasdf: some View {
+//        
+//    }
+    
 }
