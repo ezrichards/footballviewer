@@ -39,7 +39,6 @@
 		790B96B72BC6EAB100BD52FD /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96B12BC6EAB100BD52FD /* Team.swift */; };
 		790C5B632BC245950068F05F /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B622BC245950068F05F /* PreferencesView.swift */; };
 		790C5B662BC246470068F05F /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B652BC246470068F05F /* PreferencesController.swift */; };
-		790C5B692BC246B10068F05F /* UserDefaults_apiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */; };
 		791263702BBBA410003C78AF /* StatisticsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912636F2BBBA410003C78AF /* StatisticsTable.swift */; };
 		791263722BBBA490003C78AF /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791263712BBBA490003C78AF /* ViewModel.swift */; };
 		79192D552BB7918C00151D6F /* footballviewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79192D542BB7918C00151D6F /* footballviewerApp.swift */; };
@@ -58,6 +57,7 @@
 		7972E10A2BC9EABE001B1205 /* PlayerTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E1092BC9EABD001B1205 /* PlayerTeam.swift */; };
 		7972E10C2BC9EAED001B1205 /* SquadTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E10B2BC9EAED001B1205 /* SquadTeam.swift */; };
 		7972E11E2BCA29CB001B1205 /* LeagueJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E11D2BCA29CB001B1205 /* LeagueJson.swift */; };
+		79A2B4BD2BCD7BF800AE90A1 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,7 +93,6 @@
 		790B96B12BC6EAB100BD52FD /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		790C5B622BC245950068F05F /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		790C5B652BC246470068F05F /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
-		790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults_apiKey.swift; sourceTree = "<group>"; };
 		7912636F2BBBA410003C78AF /* StatisticsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTable.swift; sourceTree = "<group>"; };
 		791263712BBBA490003C78AF /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		79192D512BB7918C00151D6F /* FootballViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +113,7 @@
 		7972E1092BC9EABD001B1205 /* PlayerTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTeam.swift; sourceTree = "<group>"; };
 		7972E10B2BC9EAED001B1205 /* SquadTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquadTeam.swift; sourceTree = "<group>"; };
 		7972E11D2BCA29CB001B1205 /* LeagueJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueJson.swift; sourceTree = "<group>"; };
+		79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,7 +206,7 @@
 		790C5B672BC246960068F05F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				790C5B682BC246B10068F05F /* UserDefaults_apiKey.swift */,
+				79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -359,7 +359,6 @@
 				790B96A72BC6EA3200BD52FD /* SquadParameters.swift in Sources */,
 				790B96842BC6E8D700BD52FD /* Statistics.swift in Sources */,
 				790B968A2BC6E8D700BD52FD /* Birth.swift in Sources */,
-				790C5B692BC246B10068F05F /* UserDefaults_apiKey.swift in Sources */,
 				790B96862BC6E8D700BD52FD /* Player.swift in Sources */,
 				790B96872BC6E8D700BD52FD /* Cards.swift in Sources */,
 				7954D0862BCC6C8E00FB18AA /* LeaguesViewModel.swift in Sources */,
@@ -393,6 +392,7 @@
 				790B96B62BC6EAB100BD52FD /* Venue.swift in Sources */,
 				792396A02BC2FAE7003DC58A /* Coverage.swift in Sources */,
 				790B96822BC6E8D700BD52FD /* Shots.swift in Sources */,
+				79A2B4BD2BCD7BF800AE90A1 /* UserDefaults.swift in Sources */,
 				790B96932BC6E93800BD52FD /* PlayerJson.swift in Sources */,
 				791263702BBBA410003C78AF /* StatisticsTable.swift in Sources */,
 				790B96B42BC6EAB100BD52FD /* TeamPaging.swift in Sources */,

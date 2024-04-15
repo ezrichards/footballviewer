@@ -18,6 +18,12 @@ struct ContentView: View {
     
     var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
     @StateObject var viewModel = ViewModel()
+    @State var preferencesController = PreferencesController()
+    
+//    func getLeagueById(_ id: String) -> League? {
+//        return viewModel.leagues?.response?.first(where: { $0.league?.id == Int(id) })
+//    }
+    
     @State private var selection: League? = nil
     @State private var teamOneSelection: Team? = nil
     @State private var teamTwoSelection: Team? = nil
@@ -53,6 +59,8 @@ struct ContentView: View {
                                 Task {
                                     await viewModel.loadTeams(withLeagueId: selection?.id! ?? 0, withSeasonId: season)
                                 }
+                                print("LAST LEAGUE:", preferencesController.lastLeague)
+                                preferencesController.saveLastLeague(withId: String(describing: selection?.id!))
                             }
 //                            if let selection = selection, let name = selection.name {
 //                                Text("Selected league: \(name)")
@@ -190,8 +198,8 @@ struct ContentView: View {
                             // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
                             AsyncImage(url: URL(string: photo))
                             Text("\(player.name!)")
-                            Text("\(player.age!)")
-                            Text("\(player.nationality!)")
+                            Text("Age: \(player.age!)")
+                            Text("Nationality: \(player.nationality!)")
                         }
                         
                         ForEach(statistics) { statistic in
