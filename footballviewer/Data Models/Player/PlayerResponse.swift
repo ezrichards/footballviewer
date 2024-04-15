@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct PlayerResponse : Codable {
+struct PlayerResponse : Codable, Identifiable {
+    let id = UUID()
 	let player : Player?
 	let statistics : [Statistics]?
 

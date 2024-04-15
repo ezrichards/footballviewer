@@ -42,7 +42,6 @@ class ViewModel: ObservableObject {
                 let newData = try decoder.decode(PlayerJson.self, from: data)
                 print(newData)
                 return newData
-                
             } catch {
                 print("Error decoding squad:", error)
             }

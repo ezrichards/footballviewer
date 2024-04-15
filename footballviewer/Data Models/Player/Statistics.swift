@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Statistics : Codable {
+struct Statistics : Codable, Identifiable {
+    let id = UUID()
 	let team : Team?
 	let league : League?
 	let games : Games?
