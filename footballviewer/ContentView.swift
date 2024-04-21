@@ -13,16 +13,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    var season = 2023 // MARK: TODO maybe have a picker for season or textfield entry?
+
     @StateObject var viewModel = ViewModel()
+    @StateObject var leaguesViewModel = LeaguesViewModel()
     @State var preferencesController = PreferencesController()
-    
-//    func getLeagueById(_ id: String) -> League? {
-//        return viewModel.leagues?.response?.first(where: { $0.league?.id == Int(id) })
-//    }
-    
-    @State private var selection: League? = nil
+    let season = 2023
+
     @State private var teamOneSelection: Team? = nil
     @State private var teamTwoSelection: Team? = nil
     @State private var teamOnePlayers: [Players]?
@@ -44,21 +40,26 @@ struct ContentView: View {
                             // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-let-users-pick-options-from-a-menu
                             // reference: https://stackoverflow.com/questions/72513176/swiftui-picker-doesnt-show-selected-value
                             // reference: https://stackoverflow.com/questions/57518852/swiftui-picker-onchange-or-equivalent
-                            Picker("Select a league:", selection: $selection) {
+                            // reference: https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui
+                            Picker("Select a league:", selection: $leaguesViewModel.selectedLeague) {
+                                Text("No league selected").tag(nil as League?)
                                 ForEach(response) { response in
+//                                    if let league = getLeagueById(response.league?.id ?? 0) {
                                     if let countryName = response.country?.name {
-                                        Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
+                                      Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
                                     }
+//                                    }
                                 }
                             }
                             .frame(maxWidth: 250)
                             .pickerStyle(.menu)
-                            .onChange(of: selection) { // MARK: TODO put this under didSet on a viewmodel
+                            .onChange(of: leaguesViewModel.selectedLeague) { // MARK: TODO put this under didSet on a viewmodel
                                 Task {
-                                    await viewModel.loadTeams(withLeagueId: selection?.id! ?? 0, withSeasonId: season)
+                                    await viewModel.loadTeams(withLeagueId: leaguesViewModel.selectedLeague?.id ?? 0, withSeasonId: season)
                                 }
                                 print("LAST LEAGUE:", preferencesController.lastLeague)
-                                preferencesController.saveLastLeague(withId: selection?.id ?? 0)
+                                preferencesController.saveLastLeague(withId: leaguesViewModel.selectedLeague?.id ?? 0)
+                                print("NEW LAST LEAGUE:", preferencesController.lastLeague)
                             }
                             
 //                            if let selection = selection, let name = selection.name {
@@ -203,7 +204,7 @@ struct ContentView: View {
                         }
                         
                         ForEach(statistics) { statistic in
-                            if statistic.league?.id == selection?.id {
+                            if statistic.league?.id == leaguesViewModel.selectedLeague?.id {
                                 
                                 Text("General Statistics").bold()
                                 ScrollView {
@@ -250,7 +251,7 @@ struct ContentView: View {
                         }
                         
                         ForEach(statistics) { statistic in
-                            if statistic.league?.id == selection?.id {
+                            if statistic.league?.id == leaguesViewModel.selectedLeague?.id {
                                 
                                 Text("General Statistics").bold()
                                 ScrollView {
