@@ -19,9 +19,7 @@ import SwiftUI
 struct ContentView: View {
 
     let season = 2023
-
-    @StateObject var viewModel = ViewModel()
-    @StateObject var leaguesViewModel = LeaguesViewModel()
+    @State var viewModel = ViewModel()
     @State var preferencesController = PreferencesController()
 
     @State private var teamOneSelection: Team? = nil
@@ -40,140 +38,118 @@ struct ContentView: View {
         VStack {
             HSplitView {
                 VStack {
-                    if let leagueJson = viewModel.leagues {
-                        if let response = leagueJson.response {
-                            Picker("Select a league:", selection: $leaguesViewModel.selectedLeague) {
-                                Text("No league selected").tag(nil as League?)
-                                ForEach(response) { response in
-                                    if let countryName = response.country?.name {
-                                      Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
-                                    }
+                    LeagueView(viewModel: $viewModel)
+
+                    Text("Teams")
+                    if let squads = viewModel.squads, let response = squads.response {
+                        ScrollView {
+                            ForEach(response) { squad in
+                                if let team = squad.team {
+                                    Text(team.name ?? "undefined")
                                 }
                             }
-                            .frame(maxWidth: 250)
-                            .pickerStyle(.menu)
-//                            if let selection = selection, let name = selection.name {
-//                                Text("Selected league: \(name)")
-//                                AsyncImage(url: URL(string: selection.logo!))
-//                            }
                         }
-                        
-                        Text("Teams")
-                        if let squads: SquadJson = viewModel.squads {
-                            if let response = squads.response {
-                                ScrollView {
-                                    ForEach(response) { squad in
-                                        if let team = squad.team {
-                                            Text(team.name ?? "undefined")
+                        HStack {
+                            VStack {
+                                // MARK: team 1 selection
+                                Picker("Team One:", selection: $teamOneSelection) {
+                                    ForEach(response) { response in
+                                        if let team = response.team {
+                                            Text(team.name ?? "undefined").tag(response.team)
                                         }
                                     }
                                 }
-                                HStack {
-                                    VStack {
-                                        // MARK: team 1 selection
-                                        Picker("Team One:", selection: $teamOneSelection) {
-                                            ForEach(response) { response in
-                                                if let team = response.team {
-                                                    Text(team.name ?? "undefined").tag(response.team)
-                                                }
-                                            }
-                                        }
-                                        .frame(maxWidth: 200)
-                                        .pickerStyle(.menu)
-                                        .onChange(of: teamOneSelection) {
-                                            Task {
-                                                teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
-                                            }
-                                        }
-                                        
-                                        if let players = teamOnePlayers {
-                                            ScrollView {
-                                                ForEach(players) { player in
-                                                    if let name = player.name, let number = player.number {
-                                                        // MARK: TODO add player numbers to dropdowns
-                                                        Text("\(name) (\(number))").tag(player.id)
-                                                    }
-                                                }
-                                            }
-                                            
-                                            // player one selection
-                                            Picker("Player One:", selection: $selectedPlayerOne) {
-                                                ForEach(players) { player in
-                                                    if let name = player.name, let number = player.number {
-                                                        // MARK: TODO add player numbers to dropdowns
-                                                        Text("\(name) (\(number))").tag(player.id)
-                                                    }
-                                                }
-                                            }
-                                            .frame(maxWidth: 200)
-                                            .pickerStyle(.menu)
-                                            .onChange(of: selectedPlayerOne) { oldValue, newValue in
-                                                playerOne = teamOnePlayers?.first(where: { $0.id == selectedPlayerOne })
-                                                
-                                                if let playerId = playerOne?.id {
-                                                    Task {
-                                                        playerOneTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
-                                                    }
-                                                }
-                                            }
-                                        }
+                                .frame(maxWidth: 200)
+                                .pickerStyle(.menu)
+                                .onChange(of: teamOneSelection) {
+                                    Task {
+                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
                                     }
-
-                                    VStack {
-                                        // MARK: team 2 selection
-                                        Picker("Team Two:", selection: $teamTwoSelection) {
-                                            ForEach(response) { response in
-                                                if let team = response.team {
-                                                    Text(team.name ?? "undefined").tag(response.team)
-                                                }
-                                            }
-                                        }
-                                        .frame(maxWidth: 200)
-                                        .pickerStyle(.menu)
-                                        .onChange(of: teamTwoSelection) {
-                                            Task {
-                                                teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
-                                            }
-                                        }
-
-                                        if let players = teamTwoPlayers {
-                                            ScrollView {
-                                                ForEach(players) { player in
-                                                    if let name = player.name, let number = player.number {
-                                                        // MARK: TODO add player numbers to dropdowns
-                                                        Text("\(name) (\(number))").tag(player.id)
-                                                    }
-                                                }
-                                            }
-                                            
-                                            // player two selection
-                                            Picker("Player Two:", selection: $selectedPlayerTwo) {
-                                                ForEach(players) { player in
-                                                    if let name = player.name, let number = player.number {
-                                                        // MARK: TODO add player numbers to dropdowns
-                                                        Text("\(name) (\(number))").tag(player.id)
-                                                    }
-                                                }
-                                            }
-                                            .frame(maxWidth: 200)
-                                            .pickerStyle(.menu)
-                                            .onChange(of: selectedPlayerTwo) { oldValue, newValue in
-                                                playerTwo = teamTwoPlayers?.first(where: { $0.id == selectedPlayerTwo })
-                                                
-                                                if let playerId = playerTwo?.id {
-                                                    Task {
-                                                        playerTwoTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
-                                                    }
-                                                }
+                                }
+                                
+                                if let players = teamOnePlayers {
+                                    ScrollView {
+                                        ForEach(players) { player in
+                                            if let name = player.name, let number = player.number {
+                                                // MARK: TODO add player numbers to dropdowns
+                                                Text("\(name) (\(number))").tag(player.id)
                                             }
                                         }
                                     }
                                     
+                                    // player one selection
+                                    Picker("Player One:", selection: $selectedPlayerOne) {
+                                        ForEach(players) { player in
+                                            if let name = player.name, let number = player.number {
+                                                // MARK: TODO add player numbers to dropdowns
+                                                Text("\(name) (\(number))").tag(player.id)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: 200)
+                                    .pickerStyle(.menu)
+                                    .onChange(of: selectedPlayerOne) { oldValue, newValue in
+                                        playerOne = teamOnePlayers?.first(where: { $0.id == selectedPlayerOne })
+                                        
+                                        if let playerId = playerOne?.id {
+                                            Task {
+                                                playerOneTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
+                            VStack {
+                                // MARK: team 2 selection
+                                Picker("Team Two:", selection: $teamTwoSelection) {
+                                    ForEach(response) { response in
+                                        if let team = response.team {
+                                            Text(team.name ?? "undefined").tag(response.team)
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: 200)
+                                .pickerStyle(.menu)
+                                .onChange(of: teamTwoSelection) {
+                                    Task {
+                                        teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
+                                    }
+                                }
+
+                                if let players = teamTwoPlayers {
+                                    ScrollView {
+                                        ForEach(players) { player in
+                                            if let name = player.name, let number = player.number {
+                                                // MARK: TODO add player numbers to dropdowns
+                                                Text("\(name) (\(number))").tag(player.id)
+                                            }
+                                        }
+                                    }
+                                    
+                                    // player two selection
+                                    Picker("Player Two:", selection: $selectedPlayerTwo) {
+                                        ForEach(players) { player in
+                                            if let name = player.name, let number = player.number {
+                                                // MARK: TODO add player numbers to dropdowns
+                                                Text("\(name) (\(number))").tag(player.id)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: 200)
+                                    .pickerStyle(.menu)
+                                    .onChange(of: selectedPlayerTwo) { oldValue, newValue in
+                                        playerTwo = teamTwoPlayers?.first(where: { $0.id == selectedPlayerTwo })
+                                        
+                                        if let playerId = playerTwo?.id {
+                                            Task {
+                                                playerTwoTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
- 
                     }
     //            GraphView()
                 }
@@ -194,7 +170,7 @@ struct ContentView: View {
                         }
                         
                         ForEach(statistics) { statistic in
-                            if statistic.league?.id == leaguesViewModel.selectedLeague?.id {
+                            if statistic.league?.id == viewModel.selectedLeague?.id {
                                 
                                 Text("General Statistics").bold()
                                 ScrollView {
@@ -241,7 +217,7 @@ struct ContentView: View {
                         }
                         
                         ForEach(statistics) { statistic in
-                            if statistic.league?.id == leaguesViewModel.selectedLeague?.id {
+                            if statistic.league?.id == viewModel.selectedLeague?.id {
                                 
                                 Text("General Statistics").bold()
                                 ScrollView {
@@ -273,17 +249,9 @@ struct ContentView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                
             }
             .frame(maxHeight: .infinity)
         }
         .frame(maxWidth: .infinity)
     }
-    
-//    @ViewBuilder
-//    var someasdfasdf: some View {
-//        
-//    }
-    
 }

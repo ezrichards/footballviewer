@@ -14,12 +14,31 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
 
+    let season = 2023
     @State var preferencesController = PreferencesController()
     @Published var leagues: LeagueJson?
     @Published var squads: SquadJson?
-    
+    @Published var selectedLeague: League? = nil {
+        didSet {
+            if let league = selectedLeague, let leagueId = league.id {
+                loadTeams(leagueId: leagueId)
+                preferencesController.lastLeague = leagueId
+            }
+        }
+    }
+
     init() {
         loadLeaguesFromFile()
+        if let leagues = leagues, let responses = leagues.response {
+            for response in responses {
+                if let league = response.league {
+                    if league.id == preferencesController.lastLeague {
+                        selectedLeague = response.league
+                    }
+                }
+            }
+        }
+        loadTeams(leagueId: preferencesController.lastLeague)
     }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
@@ -165,5 +184,15 @@ class ViewModel: ObservableObject {
         let decoder = JSONDecoder()
         let newData = try? decoder.decode(LeagueJson.self, from: contentData)
         self.leagues = newData
+    }
+    
+    func updateSelection(newSelection: League?) {
+        selectedLeague = newSelection
+    }
+    
+    func loadTeams(leagueId: Int) {
+        Task {
+            await loadTeams(withLeagueId: leagueId, withSeasonId: season)
+        }
     }
 }
