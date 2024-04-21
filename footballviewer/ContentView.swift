@@ -8,16 +8,21 @@
 //  https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
 //  https://stackoverflow.com/questions/60617914/onreceive-string-publisher-lead-to-infinite-loop
 //  https://developer.apple.com/documentation/swiftui/building-layouts-with-stack-views
+//  https://www.hackingwithswift.com/quick-start/swiftui/how-to-let-users-pick-options-from-a-menu
+//  https://stackoverflow.com/questions/72513176/swiftui-picker-doesnt-show-selected-value
+//  https://stackoverflow.com/questions/57518852/swiftui-picker-onchange-or-equivalent
+//  https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui
 //
 
 import SwiftUI
 
 struct ContentView: View {
 
+    let season = 2023
+
     @StateObject var viewModel = ViewModel()
     @StateObject var leaguesViewModel = LeaguesViewModel()
     @State var preferencesController = PreferencesController()
-    let season = 2023
 
     @State private var teamOneSelection: Team? = nil
     @State private var teamTwoSelection: Team? = nil
@@ -37,31 +42,16 @@ struct ContentView: View {
                 VStack {
                     if let leagueJson = viewModel.leagues {
                         if let response = leagueJson.response {
-                            // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-let-users-pick-options-from-a-menu
-                            // reference: https://stackoverflow.com/questions/72513176/swiftui-picker-doesnt-show-selected-value
-                            // reference: https://stackoverflow.com/questions/57518852/swiftui-picker-onchange-or-equivalent
-                            // reference: https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui
                             Picker("Select a league:", selection: $leaguesViewModel.selectedLeague) {
                                 Text("No league selected").tag(nil as League?)
                                 ForEach(response) { response in
-//                                    if let league = getLeagueById(response.league?.id ?? 0) {
                                     if let countryName = response.country?.name {
                                       Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
                                     }
-//                                    }
                                 }
                             }
                             .frame(maxWidth: 250)
                             .pickerStyle(.menu)
-                            .onChange(of: leaguesViewModel.selectedLeague) { // MARK: TODO put this under didSet on a viewmodel
-                                Task {
-                                    await viewModel.loadTeams(withLeagueId: leaguesViewModel.selectedLeague?.id ?? 0, withSeasonId: season)
-                                }
-                                print("LAST LEAGUE:", preferencesController.lastLeague)
-                                preferencesController.saveLastLeague(withId: leaguesViewModel.selectedLeague?.id ?? 0)
-                                print("NEW LAST LEAGUE:", preferencesController.lastLeague)
-                            }
-                            
 //                            if let selection = selection, let name = selection.name {
 //                                Text("Selected league: \(name)")
 //                                AsyncImage(url: URL(string: selection.logo!))

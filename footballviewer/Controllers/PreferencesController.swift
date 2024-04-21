@@ -18,7 +18,7 @@ class PreferencesController {
     
     var lastLeague: Int {
         didSet {
-            saveLastLeague(withId: lastLeague)
+            saveLastLeague()
         }
     }
     
@@ -31,7 +31,7 @@ class PreferencesController {
         UserDefaults.standard.setValue(key, forKey: UserDefaults.apiKey)
     }
     
-    func saveLastLeague(withId id: Int) {
-        UserDefaults.standard.setValue(id, forKey: UserDefaults.lastLeague)
+    func saveLastLeague() {
+        UserDefaults.standard.setValue(lastLeague, forKey: UserDefaults.lastLeague)
     }
 }

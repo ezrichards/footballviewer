@@ -6,21 +6,38 @@
 //
 
 import Foundation
+import SwiftUI
 
 class LeaguesViewModel: ObservableObject {
     
-    @Published var selectedLeague: League? = nil
+    let season = 2023
+    @State var viewModel = ViewModel()
+    @State var preferencesController = PreferencesController()
+    
+    @Published var selectedLeague: League? = nil {
+        didSet {
+            if let league = selectedLeague, let leagueId = league.id {
+                Task {
+                    await viewModel.loadTeams(withLeagueId: leagueId, withSeasonId: season)
+                }
+                preferencesController.lastLeague = leagueId
+            }
+        }
+    }
+    
+    init() {
+        if let leagues = viewModel.leagues, let responses = leagues.response {
+            for response in responses {
+                if let league = response.league {
+                    if league.id == preferencesController.lastLeague {
+                        selectedLeague = response.league
+                    }
+                }
+            }
+        }
+    }
     
     func updateSelection(newSelection: League?) {
         selectedLeague = newSelection
     }
-    
-    //    func getLeagueById(_ id: Int) -> League? {
-    //        if let leagues = viewModel.leagues, let response = leagues.response {
-    //            return response.first(where: { $0.league?.id == Int(id) })?.league
-    //        }
-    //        return nil
-    ////        return viewModel.leagues?.response?.first(where: { $0.league.id == Int(id)})?.league
-    ////        return viewModel.leagues?.response?.first(where: { $0.league?.id == Int(id) })
-    //    }
 }
