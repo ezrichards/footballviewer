@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct League : Codable, Hashable {
+struct League : Codable, Hashable, Identifiable {
 	let id : Int?
 	let name : String?
 	let type : String?
@@ -28,7 +28,7 @@ struct League : Codable, Hashable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		id = try values.decodeIfPresent(Int.self, forKey: .id)
+        id = try values.decodeIfPresent(Int.self, forKey: .id)
 		name = try values.decodeIfPresent(String.self, forKey: .name)
 		type = try values.decodeIfPresent(String.self, forKey: .type)
 		logo = try values.decodeIfPresent(String.self, forKey: .logo)

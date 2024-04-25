@@ -19,18 +19,15 @@ import SwiftUI
 struct ContentView: View {
 
     let season = 2023
-    @State var viewModel = ViewModel()
+    @ObservedObject var viewModel: ViewModel
     @State var preferencesController = PreferencesController()
 
-    @State private var teamOneSelection: Team? = nil
-    @State private var teamTwoSelection: Team? = nil
-    @State private var teamOnePlayers: [Players]?
-    @State private var teamTwoPlayers: [Players]?
+//    @State private var teamOnePlayers: [Players]?
+//    @State private var teamTwoPlayers: [Players]?
     @State private var selectedPlayerOne: Int? = nil
     @State private var selectedPlayerTwo: Int? = nil
     @State private var playerOne: Players? = nil
     @State private var playerTwo: Players? = nil
-    // MARK: TODO for stat view
     @State private var playerOneTest: PlayerJson? = nil
     @State private var playerTwoTest: PlayerJson? = nil
     
@@ -38,7 +35,7 @@ struct ContentView: View {
         VStack {
             HSplitView {
                 VStack {
-                    LeagueView(viewModel: $viewModel)
+                    LeagueView(selectedLeague: $viewModel.selectedLeague, leagues: viewModel.leagues)
 
                     Text("Teams")
                     if let squads = viewModel.squads, let response = squads.response {
@@ -52,7 +49,7 @@ struct ContentView: View {
                         HStack {
                             VStack {
                                 // MARK: team 1 selection
-                                Picker("Team One:", selection: $teamOneSelection) {
+                                Picker("Team One:", selection: $viewModel.teamOneSelection) {
                                     ForEach(response) { response in
                                         if let team = response.team {
                                             Text(team.name ?? "undefined").tag(response.team)
@@ -61,13 +58,13 @@ struct ContentView: View {
                                 }
                                 .frame(maxWidth: 200)
                                 .pickerStyle(.menu)
-                                .onChange(of: teamOneSelection) {
-                                    Task {
-                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
-                                    }
-                                }
+//                                .onChange(of: teamOneSelection) {
+//                                    Task {
+//                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
+//                                    }
+//                                }
                                 
-                                if let players = teamOnePlayers {
+                                if let players = viewModel.teamOnePlayers {
                                     ScrollView {
                                         ForEach(players) { player in
                                             if let name = player.name, let number = player.number {
@@ -89,7 +86,7 @@ struct ContentView: View {
                                     .frame(maxWidth: 200)
                                     .pickerStyle(.menu)
                                     .onChange(of: selectedPlayerOne) { oldValue, newValue in
-                                        playerOne = teamOnePlayers?.first(where: { $0.id == selectedPlayerOne })
+                                        playerOne = viewModel.teamOnePlayers?.first(where: { $0.id == selectedPlayerOne })
                                         
                                         if let playerId = playerOne?.id {
                                             Task {
@@ -102,7 +99,7 @@ struct ContentView: View {
 
                             VStack {
                                 // MARK: team 2 selection
-                                Picker("Team Two:", selection: $teamTwoSelection) {
+                                Picker("Team Two:", selection: $viewModel.teamTwoSelection) {
                                     ForEach(response) { response in
                                         if let team = response.team {
                                             Text(team.name ?? "undefined").tag(response.team)
@@ -111,13 +108,13 @@ struct ContentView: View {
                                 }
                                 .frame(maxWidth: 200)
                                 .pickerStyle(.menu)
-                                .onChange(of: teamTwoSelection) {
-                                    Task {
-                                        teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
-                                    }
-                                }
+//                                .onChange(of: teamTwoSelection) {
+//                                    Task {
+//                                        teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
+//                                    }
+//                                }
 
-                                if let players = teamTwoPlayers {
+                                if let players = viewModel.teamTwoPlayers {
                                     ScrollView {
                                         ForEach(players) { player in
                                             if let name = player.name, let number = player.number {
@@ -139,7 +136,7 @@ struct ContentView: View {
                                     .frame(maxWidth: 200)
                                     .pickerStyle(.menu)
                                     .onChange(of: selectedPlayerTwo) { oldValue, newValue in
-                                        playerTwo = teamTwoPlayers?.first(where: { $0.id == selectedPlayerTwo })
+                                        playerTwo = viewModel.teamTwoPlayers?.first(where: { $0.id == selectedPlayerTwo })
                                         
                                         if let playerId = playerTwo?.id {
                                             Task {

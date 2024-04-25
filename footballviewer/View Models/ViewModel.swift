@@ -16,7 +16,7 @@ class ViewModel: ObservableObject {
 
     let season = 2023
     @State var preferencesController = PreferencesController()
-    @Published var leagues: LeagueJson?
+    @Published var leagues: [League?] = []
     @Published var squads: SquadJson?
     @Published var selectedLeague: League? = nil {
         didSet {
@@ -26,18 +26,34 @@ class ViewModel: ObservableObject {
             }
         }
     }
+    @Published var teamOnePlayers: [Players]?
+    @Published var teamTwoPlayers: [Players]?
+    @Published var teamOneSelection: Team? = nil {
+        didSet {
+            Task {
+                teamOnePlayers = await loadSquad(teamId: teamOneSelection?.id ?? 0)
+            }
+        }
+    }
+    @Published var teamTwoSelection: Team? = nil {
+        didSet {
+            Task {
+                teamTwoPlayers = await loadSquad(teamId: teamTwoSelection?.id ?? 0)
+            }
+        }
+    }
 
     init() {
         loadLeaguesFromFile()
-        if let leagues = leagues, let responses = leagues.response {
-            for response in responses {
-                if let league = response.league {
-                    if league.id == preferencesController.lastLeague {
-                        selectedLeague = response.league
-                    }
-                }
-            }
-        }
+//        if let leagues = leagues, let responses = leagues.response {
+//            for response in responses {
+//                if let league = response.league {
+//                    if league.id == preferencesController.lastLeague {
+//                        selectedLeague = response.league
+//                    }
+//                }
+//            }
+//        }
         loadTeams(leagueId: preferencesController.lastLeague)
     }
 
@@ -161,7 +177,7 @@ class ViewModel: ObservableObject {
                 }
                 
                 await MainActor.run {
-                    self.leagues = newData
+//                    self.leagues = newData
                 }
             } catch {
                 print("Error decoding squad:", error)
@@ -183,11 +199,15 @@ class ViewModel: ObservableObject {
         
         let decoder = JSONDecoder()
         let newData = try? decoder.decode(LeagueJson.self, from: contentData)
-        self.leagues = newData
-    }
-    
-    func updateSelection(newSelection: League?) {
-        selectedLeague = newSelection
+        
+        if let newData = newData, let response = newData.response {
+            for resp in response {
+                // MARK: TODO don't append a "League?"?
+                self.leagues.append(resp.league)
+            }
+        }
+
+//        self.leagues = newData
     }
     
     func loadTeams(leagueId: Int) {

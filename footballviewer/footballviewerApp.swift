@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct footballviewerApp: App {
+    
+    @ObservedObject var viewModel = ViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: viewModel)
         }
         
         Settings {
