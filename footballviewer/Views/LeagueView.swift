@@ -3,17 +3,15 @@
 //  FootballViewer
 //
 //  Created by Ethan Richards on 4/21/24.
+//  Reference: https://stackoverflow.com/questions/66521632/swiftui-picker-binding-not-updating-when-picker-changes
 //
 
 import SwiftUI
 
 struct LeagueView: View {
-
-//    var viewModel: ViewModel
-
-//    @StateObject var leaguesViewModel = LeaguesViewModel()
     
     @Binding var selectedLeague: League?
+    
     var leagues: [League?]
     
     var body: some View {
@@ -39,7 +37,7 @@ struct LeagueView: View {
 //                    Text("\(league.name ?? "")").tag(league.name)
 //                }
                 
-                Text("\(league?.name ?? "")").tag(league as League?)
+                Text("\(league?.name ?? "")").tag(league)
                 
 //                if let countryName = response.country.name {
 //                    Text("\(response.league?.name ?? "undefined") (\(countryName))").tag(response.league)
