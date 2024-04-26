@@ -15,6 +15,7 @@ import SwiftUI
 class ViewModel: ObservableObject {
 
     let season = 2023
+    @Published var leagueResp: LeagueJson?
     @State var preferencesController = PreferencesController()
     @Published var leagues: [League?] = []
     @Published var squads: SquadJson?
@@ -45,15 +46,15 @@ class ViewModel: ObservableObject {
 
     init() {
         loadLeaguesFromFile()
-//        if let leagues = leagues, let responses = leagues.response {
-//            for response in responses {
-//                if let league = response.league {
-//                    if league.id == preferencesController.lastLeague {
-//                        selectedLeague = response.league
-//                    }
-//                }
-//            }
-//        }
+        if let responses = leagueResp?.response {
+            for response in responses {
+                if let league = response.league {
+                    if league.id == preferencesController.lastLeague {
+                        selectedLeague = response.league
+                    }
+                }
+            }
+        }
         loadTeams(leagueId: preferencesController.lastLeague)
     }
 
@@ -202,12 +203,10 @@ class ViewModel: ObservableObject {
         
         if let newData = newData, let response = newData.response {
             for resp in response {
-                // MARK: TODO don't append a "League?"?
                 self.leagues.append(resp.league)
             }
         }
-
-//        self.leagues = newData
+        self.leagueResp = newData
     }
     
     func loadTeams(leagueId: Int) {
