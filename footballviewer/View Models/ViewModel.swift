@@ -178,7 +178,11 @@ class ViewModel: ObservableObject {
                 }
                 
                 await MainActor.run {
-//                    self.leagues = newData
+                    if let response = newData.response {
+                        for resp in response {
+                            self.leagues.append(resp.league)
+                        }
+                    }
                 }
             } catch {
                 print("Error decoding squad:", error)
