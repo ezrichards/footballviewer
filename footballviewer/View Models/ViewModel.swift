@@ -14,6 +14,7 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
 
+    let fileManager = FileManager.default
     let season = 2023
     @Published var leagueResp: LeagueJson?
     @State var preferencesController = PreferencesController()
@@ -222,7 +223,6 @@ class ViewModel: ObservableObject {
     }
     
     func loadLeaguesFromFile() {
-        let fileManager = FileManager.default
         let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("leagues.json")
         

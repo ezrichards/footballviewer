@@ -14,12 +14,6 @@ struct TableView: View {
     var body: some View {
         Text("Hello, World!")
 
-//        List(players) { player in
-//            Text(player.player.name ?? "")
-//        }
-        
-//        let nameKeyPath = \PlayerResponse.player.name
-        
         Table(players) {
             TableColumn("Name", value: \.player.name!)
             TableColumn("Age") {
