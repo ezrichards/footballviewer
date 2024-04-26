@@ -43,8 +43,12 @@ class ViewModel: ObservableObject {
             }
         }
     }
+    @Published var players: [PlayerResponse]
 
     init() {
+        
+        players = []
+        
         loadLeaguesFromFile()
         if let responses = leagueResp?.response {
             for response in responses {
@@ -56,6 +60,31 @@ class ViewModel: ObservableObject {
             }
         }
         loadTeams(leagueId: preferencesController.lastLeague)
+        
+        // MARK: TODO testing code only
+        Task {
+            let p1 = await loadPlayerById(withId: 1485, withSeasonId: season)
+            let p2 = await loadPlayerById(withId: 37127, withSeasonId: season)
+            let p3 = await loadPlayerById(withId: 629, withSeasonId: season)
+
+            await MainActor.run {
+                if let p1 = p1, let resp = p1.response {
+                    players.append(resp[0])
+                }
+                
+                if let p2 = p2, let resp = p2.response {
+                    players.append(resp[0])
+                }
+                
+                if let p3 = p3, let resp = p3.response {
+                    players.append(resp[0])
+                }
+            }
+        }
+        
+        // MARK: TODO check that file exists for loadLeaguesFromFile
+        // MARK: TODO load teams from file, load players from file
+        
     }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {

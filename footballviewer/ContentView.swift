@@ -153,12 +153,20 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.white)
                 
+                // MARK: player stat table
+                VStack {
+                    TableView(players: viewModel.players)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
                 // MARK: player one info
                 VStack {
                     if let playerOne = playerOneTest, let response = playerOne.response?.first, let statistics = response.statistics {
 //                        Text("\(response)")
                         
-                        if let player = response.player, let photo = player.photo {
+                        let player = response.player
+                        if let photo = player.photo {
+//                        if let player = response.player, let photo = player.photo {
                             // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
                             AsyncImage(url: URL(string: photo))
                             Text("\(player.name!)")
@@ -205,7 +213,9 @@ struct ContentView: View {
                     if let playerTwo = playerTwoTest, let response = playerTwo.response?.first, let statistics = response.statistics {
 //                        Text("\(response)")
                         
-                        if let player = response.player, let photo = player.photo {
+                        let player = response.player
+                        if let photo = player.photo {
+//                        if let player = response.player, let photo = player.photo {
                             // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
                             AsyncImage(url: URL(string: photo))
                             Text("\(player.name!)")

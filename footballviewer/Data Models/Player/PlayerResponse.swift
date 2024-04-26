@@ -14,7 +14,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 import Foundation
 struct PlayerResponse : Codable, Identifiable {
     let id = UUID()
-	let player : Player?
+	let player : Player
 	let statistics : [Statistics]?
 
 	enum CodingKeys: String, CodingKey {
@@ -25,7 +25,9 @@ struct PlayerResponse : Codable, Identifiable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		player = try values.decodeIfPresent(Player.self, forKey: .player)
+        player = try values.decode(Player.self, forKey: .player)
+        // MARK: TODO removed nil decodeIfPresent/optional here ^^
+        
 		statistics = try values.decodeIfPresent([Statistics].self, forKey: .statistics)
 	}
 
