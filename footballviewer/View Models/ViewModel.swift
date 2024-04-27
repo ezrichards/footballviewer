@@ -47,7 +47,6 @@ class ViewModel: ObservableObject {
     @Published var players: [PlayerResponse]
 
     init() {
-        
         players = []
         
         loadLeaguesFromFile()
