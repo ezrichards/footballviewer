@@ -33,6 +33,10 @@ struct TableView: View {
                         Text(String(describing: $0.statistics?[0].games?.position ?? ""))
                     }
                     
+                    TableColumn("Appearances") {
+                        Text(String(describing: $0.statistics?[0].games?.appearences ?? 0))
+                    }
+                    
                     TableColumn("Goals") {
                         Text(String(describing: $0.statistics?[0].goals?.total ?? 0))
                     }

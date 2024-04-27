@@ -30,7 +30,6 @@
 		790B96A42BC6E9EE00BD52FD /* SquadJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B969E2BC6E9EE00BD52FD /* SquadJson.swift */; };
 		790B96A72BC6EA3200BD52FD /* SquadParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96A62BC6EA3200BD52FD /* SquadParameters.swift */; };
 		790B96A92BC6EA4E00BD52FD /* PlayerParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96A82BC6EA4E00BD52FD /* PlayerParameters.swift */; };
-		790B96AB2BC6EA6A00BD52FD /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96AA2BC6EA6A00BD52FD /* GraphView.swift */; };
 		790B96B22BC6EAB100BD52FD /* TeamJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96AC2BC6EAB100BD52FD /* TeamJson.swift */; };
 		790B96B32BC6EAB100BD52FD /* TeamParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96AD2BC6EAB100BD52FD /* TeamParameters.swift */; };
 		790B96B42BC6EAB100BD52FD /* TeamPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790B96AE2BC6EAB100BD52FD /* TeamPaging.swift */; };
@@ -84,7 +83,6 @@
 		790B969E2BC6E9EE00BD52FD /* SquadJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquadJson.swift; sourceTree = "<group>"; };
 		790B96A62BC6EA3200BD52FD /* SquadParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquadParameters.swift; sourceTree = "<group>"; };
 		790B96A82BC6EA4E00BD52FD /* PlayerParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerParameters.swift; sourceTree = "<group>"; };
-		790B96AA2BC6EA6A00BD52FD /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		790B96AC2BC6EAB100BD52FD /* TeamJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamJson.swift; sourceTree = "<group>"; };
 		790B96AD2BC6EAB100BD52FD /* TeamParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamParameters.swift; sourceTree = "<group>"; };
 		790B96AE2BC6EAB100BD52FD /* TeamPaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamPaging.swift; sourceTree = "<group>"; };
@@ -234,7 +232,6 @@
 			isa = PBXGroup;
 			children = (
 				790C5B622BC245950068F05F /* PreferencesView.swift */,
-				790B96AA2BC6EA6A00BD52FD /* GraphView.swift */,
 				79BE4DBA2BD58194008474D1 /* LeagueView.swift */,
 				797185E32BDBF63D00CEB470 /* TableView.swift */,
 			);
@@ -379,7 +376,6 @@
 				797185E42BDBF63D00CEB470 /* TableView.swift in Sources */,
 				790C5B662BC246470068F05F /* PreferencesController.swift in Sources */,
 				791263722BBBA490003C78AF /* ViewModel.swift in Sources */,
-				790B96AB2BC6EA6A00BD52FD /* GraphView.swift in Sources */,
 				790B96B22BC6EAB100BD52FD /* TeamJson.swift in Sources */,
 				7923969F2BC2FAE7003DC58A /* Paging.swift in Sources */,
 				7972E1082BC9E87D001B1205 /* PlayerLeague.swift in Sources */,

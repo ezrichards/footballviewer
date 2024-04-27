@@ -145,7 +145,7 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
          
-                // MARK: TEST NEW PLAYER W/ VIEWMODEL INFO
+                // MARK: Player Detail View
                 VStack {
                     if let playerOne = viewModel.player, let response = playerOne.response?.first, let statistics = response.statistics {
 
@@ -189,98 +189,50 @@ struct ContentView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                
-                // MARK: player one info
-                VStack {
-                    if let playerOne = playerOneTest, let response = playerOne.response?.first, let statistics = response.statistics {
 
-                        let player = response.player
-                        if let photo = player.photo {
-                            AsyncImage(url: URL(string: photo))
-                            Text("\(player.name!)")
-                            Text("Age: \(player.age!)")
-                            Text("Nationality: \(player.nationality!)")
-                        }
-                        
-                        ForEach(statistics) { statistic in
-                            if statistic.league?.id == viewModel.selectedLeague?.id {
-                                
-                                Text("General Statistics").bold()
-                                ScrollView {
-                                    if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
-                                        Text("Appearances: \(appearances)")
-                                        Text("Average Rating: \(rating)")
-                                        Text("Position: \(position)")
-                                    }
-                                }
-                                
-                                Text("Goals/Assists").bold()
-                                ScrollView {
-                                    if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
-                                        Text("Goals: \(total)")
-                                        Text("Assists: \(assists)")
-                                    }
-                                }
-                                
-                                Text("Passes").bold()
-                                ScrollView {
-                                    if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
-                                        Text("Total: \(total)")
-                                        Text("Key Passes: \(key)")
-                                        Text("Accuracy: \(accuracy)%")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                // MARK: player two info
-                VStack {
-                    if let playerTwo = playerTwoTest, let response = playerTwo.response?.first, let statistics = response.statistics {
-                        let player = response.player
-                        if let photo = player.photo {
-                            AsyncImage(url: URL(string: photo))
-                            Text("\(player.name!)")
-                            Text("Age: \(player.age!)")
-                            Text("Nationality: \(player.nationality!)")
-                        }
-                        
-                        ForEach(statistics) { statistic in
-                            if statistic.league?.id == viewModel.selectedLeague?.id {
-                                
-                                Text("General Statistics").bold()
-                                ScrollView {
-                                    if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
-                                        Text("Appearances: \(appearances)")
-                                        Text("Average Rating: \(rating)")
-                                        Text("Position: \(position)")
-                                    }
-                                }
-                                
-                                Text("Goals/Assists").bold()
-                                ScrollView {
-                                    if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
-                                        Text("Goals: \(total)")
-                                        Text("Assists: \(assists)")
-                                    }
-                                }
-                                
-                                Text("Passes").bold()
-                                ScrollView {
-                                    if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
-                                        Text("Total: \(total)")
-                                        Text("Key Passes: \(key)")
-                                        Text("Accuracy: \(accuracy)%")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                // MARK: player two info
+//                VStack {
+//                    if let playerTwo = playerTwoTest, let response = playerTwo.response?.first, let statistics = response.statistics {
+//                        let player = response.player
+//                        if let photo = player.photo {
+//                            AsyncImage(url: URL(string: photo))
+//                            Text("\(player.name!)")
+//                            Text("Age: \(player.age!)")
+//                            Text("Nationality: \(player.nationality!)")
+//                        }
+//                        
+//                        ForEach(statistics) { statistic in
+//                            if statistic.league?.id == viewModel.selectedLeague?.id {  
+//                                Text("General Statistics").bold()
+//                                ScrollView {
+//                                    if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
+//                                        Text("Appearances: \(appearances)")
+//                                        Text("Average Rating: \(rating)")
+//                                        Text("Position: \(position)")
+//                                    }
+//                                }
+//                                
+//                                Text("Goals/Assists").bold()
+//                                ScrollView {
+//                                    if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
+//                                        Text("Goals: \(total)")
+//                                        Text("Assists: \(assists)")
+//                                    }
+//                                }
+//                                
+//                                Text("Passes").bold()
+//                                ScrollView {
+//                                    if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
+//                                        Text("Total: \(total)")
+//                                        Text("Key Passes: \(key)")
+//                                        Text("Accuracy: \(accuracy)%")
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .frame(maxHeight: .infinity)
         }
