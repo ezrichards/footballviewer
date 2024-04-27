@@ -4,20 +4,34 @@
 //
 //  Created by Ethan Richards on 4/26/24.
 //  References: https://stackoverflow.com/questions/69874420/macos-swiftui-table-with-more-than-10-columns
+//  https://www.swiftyplace.com/blog/chy7hvne
+//  https://stackoverflow.com/questions/74339012/change-of-selected-row-in-table-for-macos
 //
 
 import SwiftUI
 
 struct TableView: View {
     
+    var viewModel: ViewModel
+    
     var players: [PlayerResponse]
+    
+    @State private var selection: PlayerResponse.ID? = nil {
+        didSet {
+            print("HELLO?")
+            print("DIDSET:", selection)
+            viewModel.playerSelection = selection
+//            viewModel.team
+//            TODO move contentView playerOneSelection into viewmodel
+        }
+    }
     
     var body: some View {
         VSplitView {
             Text("Select players?")
                 .frame(maxWidth: .infinity, minHeight: 500)
 
-            Table(players) {
+            Table(players, selection: $selection) {
                 Group {
                     TableColumn("Name", value: \PlayerResponse.player.name!)
                     TableColumn("Age") {
@@ -72,6 +86,13 @@ struct TableView: View {
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 400)
+            .onChange(of: selection) {
+                print("Selected row is \(String(describing: selection))")
+                if selection == nil {
+                    viewModel.player = nil
+                }
+                viewModel.playerSelection = selection
+            }
         }
         .frame(maxWidth: .infinity)
     }

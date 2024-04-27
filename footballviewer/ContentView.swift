@@ -12,6 +12,7 @@
 //  https://stackoverflow.com/questions/72513176/swiftui-picker-doesnt-show-selected-value
 //  https://stackoverflow.com/questions/57518852/swiftui-picker-onchange-or-equivalent
 //  https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui
+//  https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
 //
 
 import SwiftUI
@@ -58,12 +59,7 @@ struct ContentView: View {
                                 }
                                 .frame(maxWidth: 200)
                                 .pickerStyle(.menu)
-//                                .onChange(of: teamOneSelection) {
-//                                    Task {
-//                                        teamOnePlayers = await viewModel.loadSquad(teamId: teamOneSelection?.id ?? 0)
-//                                    }
-//                                }
-                                
+
                                 if let players = viewModel.teamOnePlayers {
                                     ScrollView {
                                         ForEach(players) { player in
@@ -108,11 +104,6 @@ struct ContentView: View {
                                 }
                                 .frame(maxWidth: 200)
                                 .pickerStyle(.menu)
-//                                .onChange(of: teamTwoSelection) {
-//                                    Task {
-//                                        teamTwoPlayers = await viewModel.loadSquad(teamId: teamTwoSelection?.id ?? 0)
-//                                    }
-//                                }
 
                                 if let players = viewModel.teamTwoPlayers {
                                     ScrollView {
@@ -155,9 +146,53 @@ struct ContentView: View {
                 
                 // MARK: player stat table
                 VStack {
-                    TableView(players: viewModel.players)
+                    TableView(viewModel: viewModel, players: viewModel.players)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+         
+                // MARK: TEST NEW PLAYER W/ VIEWMODEL INFO
+                VStack {
+                    if let playerOne = viewModel.player, let response = playerOne.response?.first, let statistics = response.statistics {
+
+                        if let photo = response.player.photo {
+                            AsyncImage(url: URL(string: photo))
+                            Text("\(response.player.name!)")
+                            Text("Age: \(response.player.age!)")
+                            Text("Nationality: \(response.player.nationality!)")
+                        }
+                        
+                        ForEach(statistics) { statistic in
+                            if statistic.league?.id == viewModel.selectedLeague?.id {
+                                ScrollView {
+                                    Text("General Statistics").bold()
+                                    if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
+                                        Text("Appearances: \(appearances)")
+                                        Text("Average Rating: \(rating)")
+                                        Text("Position: \(position)")
+                                    }
+                                    
+                                    Text("Goals/Assists").bold()
+                                    if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
+                                        Text("Goals: \(total)")
+                                        Text("Assists: \(assists)")
+                                    }
+                                    
+                                    Text("Passes").bold()
+                                    if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
+                                        Text("Total: \(total)")
+                                        Text("Key Passes: \(key)")
+                                        Text("Accuracy: \(accuracy)%")
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Text("No player selected!")
+                            .padding()
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
                 
                 // MARK: player one info
                 VStack {

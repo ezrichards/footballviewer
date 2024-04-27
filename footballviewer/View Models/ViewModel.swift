@@ -45,6 +45,25 @@ class ViewModel: ObservableObject {
         }
     }
     @Published var players: [PlayerResponse]
+        
+    // MARK: TODO this variable is temporary
+    private var loadedPlayers: [PlayerJson?] = []
+
+    // selected 'detail view' player and associated data
+    @Published var player: PlayerJson? = nil
+    @Published var playerSelection: PlayerResponse.ID? = nil {
+        didSet {
+            for player in loadedPlayers {
+                if let player = player, let resp = player.response {
+                    for playerResp in resp {
+                        if playerResp.id == playerSelection {
+                            self.player = player
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     init() {
         players = []
@@ -61,11 +80,15 @@ class ViewModel: ObservableObject {
         }
         loadTeams(leagueId: preferencesController.lastLeague)
         
-        // MARK: TODO testing code only
+        // MARK: TODO testing code only; query and cache all or most players
         Task {
             let p1 = await loadPlayerById(withId: 1485, withSeasonId: season)
             let p2 = await loadPlayerById(withId: 37127, withSeasonId: season)
             let p3 = await loadPlayerById(withId: 629, withSeasonId: season)
+
+            loadedPlayers.append(p1)
+            loadedPlayers.append(p2)
+            loadedPlayers.append(p3)
 
             await MainActor.run {
                 if let p1 = p1, let resp = p1.response {
