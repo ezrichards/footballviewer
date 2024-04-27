@@ -5,8 +5,7 @@
 //  Created by Ethan Richards on 3/29/24.
 //
 //  References:
-//  https://www.hackingwithswift.com/forums/swiftui/trigger-action-from-picker/1745
-//  https://stackoverflow.com/questions/60617914/onreceive-string-publisher-lead-to-infinite-loop
+//   https://stackoverflow.com/questions/60617914/onreceive-string-publisher-lead-to-infinite-loop
 //  https://developer.apple.com/documentation/swiftui/building-layouts-with-stack-views
 //  https://www.hackingwithswift.com/quick-start/swiftui/how-to-let-users-pick-options-from-a-menu
 //  https://stackoverflow.com/questions/72513176/swiftui-picker-doesnt-show-selected-value
@@ -19,12 +18,9 @@ import SwiftUI
 
 struct ContentView: View {
 
-    let season = 2023
     @ObservedObject var viewModel: ViewModel
     @State var preferencesController = PreferencesController()
 
-//    @State private var teamOnePlayers: [Players]?
-//    @State private var teamTwoPlayers: [Players]?
     @State private var selectedPlayerOne: Int? = nil
     @State private var selectedPlayerTwo: Int? = nil
     @State private var playerOne: Players? = nil
@@ -86,7 +82,7 @@ struct ContentView: View {
                                         
                                         if let playerId = playerOne?.id {
                                             Task {
-                                                playerOneTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
+                                                playerOneTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: 2023)
                                             }
                                         }
                                     }
@@ -131,7 +127,7 @@ struct ContentView: View {
                                         
                                         if let playerId = playerTwo?.id {
                                             Task {
-                                                playerTwoTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: season)
+                                                playerTwoTest = await viewModel.loadPlayerById(withId: playerId, withSeasonId: 2023)
                                             }
                                         }
                                     }
@@ -139,7 +135,6 @@ struct ContentView: View {
                             }
                         }
                     }
-    //            GraphView()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.white)
@@ -170,12 +165,14 @@ struct ContentView: View {
                                         Text("Average Rating: \(rating)")
                                         Text("Position: \(position)")
                                     }
+                                    Spacer()
                                     
                                     Text("Goals/Assists").bold()
                                     if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
                                         Text("Goals: \(total)")
                                         Text("Assists: \(assists)")
                                     }
+                                    Spacer()
                                     
                                     Text("Passes").bold()
                                     if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
@@ -197,12 +194,9 @@ struct ContentView: View {
                 // MARK: player one info
                 VStack {
                     if let playerOne = playerOneTest, let response = playerOne.response?.first, let statistics = response.statistics {
-//                        Text("\(response)")
-                        
+
                         let player = response.player
                         if let photo = player.photo {
-//                        if let player = response.player, let photo = player.photo {
-                            // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
                             AsyncImage(url: URL(string: photo))
                             Text("\(player.name!)")
                             Text("Age: \(player.age!)")
@@ -246,12 +240,8 @@ struct ContentView: View {
                 // MARK: player two info
                 VStack {
                     if let playerTwo = playerTwoTest, let response = playerTwo.response?.first, let statistics = response.statistics {
-//                        Text("\(response)")
-                        
                         let player = response.player
                         if let photo = player.photo {
-//                        if let player = response.player, let photo = player.photo {
-                            // reference: https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
                             AsyncImage(url: URL(string: photo))
                             Text("\(player.name!)")
                             Text("Age: \(player.age!)")

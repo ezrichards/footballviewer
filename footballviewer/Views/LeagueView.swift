@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct LeagueView: View {
-    
     @Binding var selectedLeague: League?
     
     var leagues: [League?]

@@ -16,8 +16,8 @@ class ViewModel: ObservableObject {
 
     let fileManager = FileManager.default
     let season = 2023
-    @Published var leagueResp: LeagueJson?
     @State var preferencesController = PreferencesController()
+    @Published var leagueResp: LeagueJson?
     @Published var leagues: [League?] = []
     @Published var squads: SquadJson?
     @Published var selectedLeague: League? = nil {

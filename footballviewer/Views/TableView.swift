@@ -11,24 +11,15 @@
 import SwiftUI
 
 struct TableView: View {
-    
     var viewModel: ViewModel
     
     var players: [PlayerResponse]
     
-    @State private var selection: PlayerResponse.ID? = nil {
-        didSet {
-            print("HELLO?")
-            print("DIDSET:", selection)
-            viewModel.playerSelection = selection
-//            viewModel.team
-//            TODO move contentView playerOneSelection into viewmodel
-        }
-    }
-    
+    @State private var selection: PlayerResponse.ID? = nil
+
     var body: some View {
         VSplitView {
-            Text("Select players?")
+            Text("Select players")
                 .frame(maxWidth: .infinity, minHeight: 500)
 
             Table(players, selection: $selection) {
@@ -87,7 +78,6 @@ struct TableView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 400)
             .onChange(of: selection) {
-                print("Selected row is \(String(describing: selection))")
                 if selection == nil {
                     viewModel.player = nil
                 }
