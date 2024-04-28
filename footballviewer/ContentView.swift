@@ -32,6 +32,38 @@ struct ContentView: View {
         VStack {
             HSplitView {
                 VStack {
+                    List {
+                        Section(header: Text("Leagues")) {
+                            ForEach(viewModel.leagues, id: \.?.id) { league in
+                                Text(league?.name ?? "")
+                            }
+                        }
+                    }
+                    .padding()
+                    .frame(maxHeight: 300)
+                    
+                    List {
+                        Section(header: Text("Teams")) {
+                            if let squads = viewModel.squads, let response = squads.response {
+                                ForEach(response) { squad in
+                                    if let team = squad.team {
+                                        Text(team.name ?? "undefined")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding()
+                    .frame(maxHeight: 300)
+                    
+//                    List {
+//                    Section(League)
+//                    LeagueContent
+//
+//                    Section(Teams)
+//                    TeamsContent
+//                    }
+//                    
                     LeagueView(selectedLeague: $viewModel.selectedLeague, leagues: viewModel.leagues)
 
                     Text("Teams")
@@ -146,6 +178,9 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
          
                 // MARK: Player Detail View
+                
+                // MARK: TODO put in own view DetailView()/InspectorView()
+                
                 VStack {
                     if let playerOne = viewModel.player, let response = playerOne.response?.first, let statistics = response.statistics {
 
