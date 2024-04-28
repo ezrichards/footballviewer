@@ -12,6 +12,7 @@
 //  https://stackoverflow.com/questions/57518852/swiftui-picker-onchange-or-equivalent
 //  https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui
 //  https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
+//  https://www.hackingwithswift.com/quick-start/swiftui/how-to-allow-row-selection-in-a-list
 //
 
 import SwiftUI
@@ -28,11 +29,15 @@ struct ContentView: View {
     @State private var playerOneTest: PlayerJson? = nil
     @State private var playerTwoTest: PlayerJson? = nil
     
+//    @State var selectedLeagues: Set<League.ID?>? = nil
+    @State var selectedLeagues: League.ID? = nil
+    
     var body: some View {
         VStack {
             HSplitView {
                 VStack {
-                    List {
+                    // MARK: Leagues List
+                    List(selection: $selectedLeagues) {
                         Section(header: Text("Leagues")) {
                             ForEach(viewModel.leagues, id: \.?.id) { league in
                                 Text(league?.name ?? "")
@@ -42,6 +47,7 @@ struct ContentView: View {
                     .padding()
                     .frame(maxHeight: 300)
                     
+                    // MARK: Teams List
                     List {
                         Section(header: Text("Teams")) {
                             if let squads = viewModel.squads, let response = squads.response {
@@ -55,15 +61,8 @@ struct ContentView: View {
                     }
                     .padding()
                     .frame(maxHeight: 300)
-                    
-//                    List {
-//                    Section(League)
-//                    LeagueContent
-//
-//                    Section(Teams)
-//                    TeamsContent
-//                    }
-//                    
+
+                    // MARK: TODO old league view (move stuff here)
                     LeagueView(selectedLeague: $viewModel.selectedLeague, leagues: viewModel.leagues)
 
                     Text("Teams")
@@ -178,50 +177,8 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
          
                 // MARK: Player Detail View
-                
-                // MARK: TODO put in own view DetailView()/InspectorView()
-                
                 VStack {
-                    if let playerOne = viewModel.player, let response = playerOne.response?.first, let statistics = response.statistics {
-
-                        if let photo = response.player.photo {
-                            AsyncImage(url: URL(string: photo))
-                            Text("\(response.player.name!)")
-                            Text("Age: \(response.player.age!)")
-                            Text("Nationality: \(response.player.nationality!)")
-                        }
-                        
-                        ForEach(statistics) { statistic in
-                            if statistic.league?.id == viewModel.selectedLeague?.id {
-                                ScrollView {
-                                    Text("General Statistics").bold()
-                                    if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
-                                        Text("Appearances: \(appearances)")
-                                        Text("Average Rating: \(rating)")
-                                        Text("Position: \(position)")
-                                    }
-                                    Spacer()
-                                    
-                                    Text("Goals/Assists").bold()
-                                    if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
-                                        Text("Goals: \(total)")
-                                        Text("Assists: \(assists)")
-                                    }
-                                    Spacer()
-                                    
-                                    Text("Passes").bold()
-                                    if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
-                                        Text("Total: \(total)")
-                                        Text("Key Passes: \(key)")
-                                        Text("Accuracy: \(accuracy)%")
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        Text("No player selected!")
-                            .padding()
-                    }
+                    DetailView(viewModel: viewModel, player: viewModel.player)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 

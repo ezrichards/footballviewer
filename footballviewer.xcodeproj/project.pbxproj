@@ -57,6 +57,7 @@
 		7972E11E2BCA29CB001B1205 /* LeagueJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7972E11D2BCA29CB001B1205 /* LeagueJson.swift */; };
 		79A2B4BD2BCD7BF800AE90A1 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */; };
 		79BE4DBB2BD58194008474D1 /* LeagueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4DBA2BD58194008474D1 /* LeagueView.swift */; };
+		79E51F952BDEB7A60083BA43 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E51F942BDEB7A60083BA43 /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		7972E11D2BCA29CB001B1205 /* LeagueJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeagueJson.swift; sourceTree = "<group>"; };
 		79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		79BE4DBA2BD58194008474D1 /* LeagueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueView.swift; sourceTree = "<group>"; };
+		79E51F942BDEB7A60083BA43 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				790C5B622BC245950068F05F /* PreferencesView.swift */,
 				79BE4DBA2BD58194008474D1 /* LeagueView.swift */,
 				797185E32BDBF63D00CEB470 /* TableView.swift */,
+				79E51F942BDEB7A60083BA43 /* DetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				792396A22BC2FAE7003DC58A /* Country.swift in Sources */,
 				790B96972BC6E99100BD52FD /* PlayerPaging.swift in Sources */,
 				790B96B62BC6EAB100BD52FD /* Venue.swift in Sources */,
+				79E51F952BDEB7A60083BA43 /* DetailView.swift in Sources */,
 				792396A02BC2FAE7003DC58A /* Coverage.swift in Sources */,
 				790B96822BC6E8D700BD52FD /* Shots.swift in Sources */,
 				79A2B4BD2BCD7BF800AE90A1 /* UserDefaults.swift in Sources */,
