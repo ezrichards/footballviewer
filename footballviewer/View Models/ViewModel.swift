@@ -65,6 +65,23 @@ class ViewModel: ObservableObject {
         }
     }
 
+    // selected league info
+    @Published var selectedLeagues: [League?] = []
+    @Published var leagueSelection: Set<League.ID> = [] {
+        didSet {
+            var newLeagues: [League?] = []
+            for league in leagues {
+                for selection in leagueSelection {
+                    if league?.id == selection && !newLeagues.contains(league) {
+                        newLeagues.append(league)
+                    }
+                }
+            }
+            self.selectedLeagues = newLeagues
+//            print("NEW: \(newLeagues)")
+        }
+    }
+    
     init() {
         players = []
         

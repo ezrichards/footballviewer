@@ -35,6 +35,14 @@ struct ContentView: View {
     //                    .searchable(text: $searchText)
     
     var body: some View {
+//        NavigationSplitView {
+//            Text("Sidebar")
+//        } content: {
+//            Text("Content")
+//        } detail: {
+//            Text("Test")
+//        }
+        
         VStack {
             HSplitView {
                 VStack {
@@ -45,6 +53,10 @@ struct ContentView: View {
                                 Text(league?.name ?? "")
                             }
                         }
+                    }
+                    .onChange(of: selectedLeagues) {
+                        print("selectedleagues changed:", selectedLeagues)
+                        viewModel.leagueSelection = selectedLeagues
                     }
                     .padding()
                     .frame(maxHeight: 300)
