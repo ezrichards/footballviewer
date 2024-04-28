@@ -9,19 +9,26 @@
 import SwiftUI
 
 struct LeagueView: View {
-    @Binding var selectedLeague: League?
+    var viewModel: ViewModel
     
+    @Binding var selectedLeagues: Set<League.ID>
+
     var leagues: [League?]
     
     var body: some View {
-        EmptyView()
-//        Picker("Select a league:", selection: $selectedLeague) {
-//            Text("No league selected").tag(nil as League?)
-//            ForEach(leagues, id: \.?.id) { league in
-//                Text("\(league?.name ?? "undefined")").tag(league)
-//            }
+        List(selection: $selectedLeagues) {
+            Section(header: Text("Leagues")) {
+                ForEach(leagues, id: \.?.id) { league in
+                    Text(league?.name ?? "")
+                }
+            }
+        }
+//        .onChange(of: selectedLeagues) {
+            // MARK: TODO this shouldn't be necessary
+//                        print("selectedleagues changed:", selectedLeagues)
+//            viewModel.leagueSelection = selectedLeagues
 //        }
-//        .frame(maxWidth: 250)
-//        .pickerStyle(.menu)
+        .padding()
+        .frame(maxHeight: 300)
     }
 }

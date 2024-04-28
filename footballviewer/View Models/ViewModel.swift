@@ -79,8 +79,8 @@ class ViewModel: ObservableObject {
             }
             self.selectedLeagues = newLeagues
             
+            self.teams = []
             for league in newLeagues {
-                self.teams = []
                 loadTeams(leagueId: league?.id ?? 0)
             }
 

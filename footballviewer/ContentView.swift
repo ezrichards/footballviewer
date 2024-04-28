@@ -28,31 +28,12 @@ struct ContentView: View {
     @State private var playerTwo: Players? = nil
     @State private var playerOneTest: PlayerJson? = nil
     @State private var playerTwoTest: PlayerJson? = nil
-    
-    // MARK: New redesign variables
-    @State var selectedLeagues: Set<League.ID> = []
-//    @State private var searchText = ""
-    //                    .searchable(text: $searchText)
-    
+
     var body: some View {
         NavigationSplitView {
             VStack {
-                // MARK: Leagues List
-                List(selection: $selectedLeagues) {
-                    Section(header: Text("Leagues")) {
-                        ForEach(viewModel.leagues, id: \.?.id) { league in
-                            Text(league?.name ?? "")
-                        }
-                    }
-                }
-                .onChange(of: selectedLeagues) {
-                    // MARK: TODO this shouldn't be necessary
-//                        print("selectedleagues changed:", selectedLeagues)
-                    viewModel.leagueSelection = selectedLeagues
-                }
-                .padding()
-                .frame(maxHeight: 300)
-                
+                LeagueView(viewModel: viewModel, selectedLeagues: $viewModel.leagueSelection, leagues: viewModel.leagues)
+
                 // MARK: Teams List
                 List {
                     Section(header: Text("Teams")) {
@@ -71,9 +52,6 @@ struct ContentView: View {
                 }
                 .padding()
                 .frame(maxHeight: 300)
-
-                // MARK: TODO old league view (move stuff here)
-                LeagueView(selectedLeague: $viewModel.selectedLeague, leagues: viewModel.leagues)
 
 //                    Text("Teams")
 //                    if let squads = viewModel.squads, let response = squads.response {
