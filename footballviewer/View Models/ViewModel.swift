@@ -78,24 +78,30 @@ class ViewModel: ObservableObject {
                 }
             }
             self.selectedLeagues = newLeagues
-//            print("NEW: \(newLeagues)")
+            
+            for league in newLeagues {
+                self.teams = []
+                loadTeams(leagueId: league?.id ?? 0)
+            }
+
         }
     }
+    @Published var teams: [SquadResponse] = [] // MARK: TODO may be temp or delete "squads" variable
     
     init() {
         players = []
         
         loadLeaguesFromFile()
-        if let responses = leagueResp?.response {
-            for response in responses {
-                if let league = response.league {
-                    if league.id == preferencesController.lastLeague {
-                        selectedLeague = response.league
-                    }
-                }
-            }
-        }
-        loadTeams(leagueId: preferencesController.lastLeague)
+//        if let responses = leagueResp?.response {
+//            for response in responses {
+//                if let league = response.league {
+//                    if league.id == preferencesController.lastLeague {
+//                        selectedLeague = response.league
+//                    }
+//                }
+//            }
+//        }
+//        loadTeams(leagueId: preferencesController.lastLeague)
         
         // MARK: TODO testing code only; query and cache all or most players
 //        Task {
@@ -202,7 +208,19 @@ class ViewModel: ObservableObject {
             do {
                 let newData = try decoder.decode(SquadJson.self, from: data)
                 await MainActor.run {
-                    self.squads = newData
+//                    self.squads = newData
+                    
+                    // MARK: TODO new teams code
+                    if let resp = newData.response {
+                        for response in resp {
+                            if !teams.contains(where: { $0.id == response.id }) {
+                                self.teams.append(response)
+                                print("ADDED \(response)")
+                            }
+                        }
+                    }
+//                    self.teams.append(newData.response?[0])
+                    
                 }
             } catch {
                 print("Error decoding squad:", error)

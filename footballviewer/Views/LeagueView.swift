@@ -14,13 +14,14 @@ struct LeagueView: View {
     var leagues: [League?]
     
     var body: some View {
-        Picker("Select a league:", selection: $selectedLeague) {
-            Text("No league selected").tag(nil as League?)
-            ForEach(leagues, id: \.?.id) { league in
-                Text("\(league?.name ?? "undefined")").tag(league)
-            }
-        }
-        .frame(maxWidth: 250)
-        .pickerStyle(.menu)
+        EmptyView()
+//        Picker("Select a league:", selection: $selectedLeague) {
+//            Text("No league selected").tag(nil as League?)
+//            ForEach(leagues, id: \.?.id) { league in
+//                Text("\(league?.name ?? "undefined")").tag(league)
+//            }
+//        }
+//        .frame(maxWidth: 250)
+//        .pickerStyle(.menu)
     }
 }
