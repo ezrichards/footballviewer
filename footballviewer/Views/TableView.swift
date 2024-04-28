@@ -19,9 +19,6 @@ struct TableView: View {
 
     var body: some View {
         VSplitView {
-            Text("Select players")
-                .frame(maxWidth: .infinity, minHeight: 500)
-
             Table(players, selection: $selection) {
                 Group {
                     TableColumn("Name", value: \PlayerResponse.player.name!)
