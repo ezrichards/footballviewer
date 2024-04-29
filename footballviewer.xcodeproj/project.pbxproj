@@ -58,6 +58,7 @@
 		79A2B4BD2BCD7BF800AE90A1 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */; };
 		79BE4DBB2BD58194008474D1 /* LeagueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4DBA2BD58194008474D1 /* LeagueView.swift */; };
 		79E51F952BDEB7A60083BA43 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E51F942BDEB7A60083BA43 /* DetailView.swift */; };
+		79FAEF8E2BDFF43E009B9B69 /* TeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,7 @@
 		79A2B4BC2BCD7BF800AE90A1 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		79BE4DBA2BD58194008474D1 /* LeagueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueView.swift; sourceTree = "<group>"; };
 		79E51F942BDEB7A60083BA43 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 				79BE4DBA2BD58194008474D1 /* LeagueView.swift */,
 				797185E32BDBF63D00CEB470 /* TableView.swift */,
 				79E51F942BDEB7A60083BA43 /* DetailView.swift */,
+				79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				79192D552BB7918C00151D6F /* footballviewerApp.swift in Sources */,
 				792396A12BC2FAE7003DC58A /* Seasons.swift in Sources */,
 				7972E10C2BC9EAED001B1205 /* SquadTeam.swift in Sources */,
+				79FAEF8E2BDFF43E009B9B69 /* TeamView.swift in Sources */,
 				790B968B2BC6E8D700BD52FD /* Tackles.swift in Sources */,
 				790B96A32BC6E9EE00BD52FD /* Players.swift in Sources */,
 				790B96B32BC6EAB100BD52FD /* TeamParameters.swift in Sources */,

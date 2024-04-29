@@ -83,10 +83,14 @@ class ViewModel: ObservableObject {
             for league in newLeagues {
                 loadTeams(leagueId: league?.id ?? 0)
             }
-
         }
     }
     @Published var teams: [SquadResponse] = [] // MARK: TODO may be temp or delete "squads" variable
+    @Published var teamSelection: Set<SquadResponse.ID> = [] {
+        didSet {
+            print("didSet", teamSelection)
+        }
+    }
     
     init() {
         players = []
@@ -215,7 +219,7 @@ class ViewModel: ObservableObject {
                         for response in resp {
                             if !teams.contains(where: { $0.id == response.id }) {
                                 self.teams.append(response)
-                                print("ADDED \(response)")
+//                                print("ADDED \(response)")
                             }
                         }
                     }

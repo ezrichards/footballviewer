@@ -34,24 +34,7 @@ struct ContentView: View {
             VStack {
                 LeagueView(viewModel: viewModel, selectedLeagues: $viewModel.leagueSelection, leagues: viewModel.leagues)
 
-                // MARK: Teams List
-                List {
-                    Section(header: Text("Teams")) {
-                        ForEach(viewModel.teams, id: \.id) { team in
-                            Text((team.team?.name)!)
-                        }
-                        
-//                        if let squads = viewModel.squads, let response = squads.response {
-//                            ForEach(response) { squad in
-//                                if let team = squad.team {
-//                                    Text(team.name ?? "undefined")
-//                                }
-//                            }
-//                        }
-                    }
-                }
-                .padding()
-                .frame(maxHeight: 300)
+                TeamView(viewModel: viewModel, selectedTeams: $viewModel.teamSelection, leagues: viewModel.leagues, teams: viewModel.teams)
 
 //                    Text("Teams")
 //                    if let squads = viewModel.squads, let response = squads.response {

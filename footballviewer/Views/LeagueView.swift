@@ -23,11 +23,6 @@ struct LeagueView: View {
                 }
             }
         }
-//        .onChange(of: selectedLeagues) {
-            // MARK: TODO this shouldn't be necessary
-//                        print("selectedleagues changed:", selectedLeagues)
-//            viewModel.leagueSelection = selectedLeagues
-//        }
         .padding()
         .frame(maxHeight: 300)
     }
