@@ -59,6 +59,7 @@
 		79BE4DBB2BD58194008474D1 /* LeagueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4DBA2BD58194008474D1 /* LeagueView.swift */; };
 		79E51F952BDEB7A60083BA43 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E51F942BDEB7A60083BA43 /* DetailView.swift */; };
 		79FAEF8E2BDFF43E009B9B69 /* TeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */; };
+		79FAEF902BDFFB36009B9B69 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FAEF8F2BDFFB36009B9B69 /* PlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +117,7 @@
 		79BE4DBA2BD58194008474D1 /* LeagueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueView.swift; sourceTree = "<group>"; };
 		79E51F942BDEB7A60083BA43 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamView.swift; sourceTree = "<group>"; };
+		79FAEF8F2BDFFB36009B9B69 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 				797185E32BDBF63D00CEB470 /* TableView.swift */,
 				79E51F942BDEB7A60083BA43 /* DetailView.swift */,
 				79FAEF8D2BDFF43E009B9B69 /* TeamView.swift */,
+				79FAEF8F2BDFFB36009B9B69 /* PlayerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				790B968B2BC6E8D700BD52FD /* Tackles.swift in Sources */,
 				790B96A32BC6E9EE00BD52FD /* Players.swift in Sources */,
 				790B96B32BC6EAB100BD52FD /* TeamParameters.swift in Sources */,
+				79FAEF902BDFFB36009B9B69 /* PlayerView.swift in Sources */,
 				790B968F2BC6E8D700BD52FD /* Substitutes.swift in Sources */,
 				790B96A92BC6EA4E00BD52FD /* PlayerParameters.swift in Sources */,
 				790B96B52BC6EAB100BD52FD /* TeamResponse.swift in Sources */,

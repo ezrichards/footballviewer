@@ -36,6 +36,8 @@ struct ContentView: View {
 
                 TeamView(viewModel: viewModel, selectedTeams: $viewModel.teamSelection, leagues: viewModel.leagues, teams: viewModel.teams)
 
+                PlayerView()
+                
 //                    Text("Teams")
 //                    if let squads = viewModel.squads, let response = squads.response {
 //                        ScrollView {

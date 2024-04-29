@@ -14,8 +14,9 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
 
+    // MARK: TODO check if all of these variables are used and clean up the data model
     let fileManager = FileManager.default
-    let season = 2023
+    let season = 2023 // MARK: TODO make this a variable within settings/preferences?
     @State var preferencesController = PreferencesController()
     @Published var leagueResp: LeagueJson?
     @Published var leagues: [League?] = []
@@ -46,7 +47,7 @@ class ViewModel: ObservableObject {
     }
     @Published var players: [PlayerResponse]
         
-    // MARK: TODO this variable is temporary
+    // players that will show up in the table
     private var loadedPlayers: [PlayerJson?] = []
 
     // selected 'detail view' player and associated data
@@ -85,10 +86,19 @@ class ViewModel: ObservableObject {
             }
         }
     }
-    @Published var teams: [SquadResponse] = [] // MARK: TODO may be temp or delete "squads" variable
+    
+    // selected team info
+    @Published var teams: [SquadResponse] = []
     @Published var teamSelection: Set<SquadResponse.ID> = [] {
         didSet {
             print("didSet", teamSelection)
+        }
+    }
+    
+    // selected players info (sidebar)
+    @Published var selectedPlayers: Set<PlayerResponse.ID> = [] {
+        didSet {
+            print("didSet")
         }
     }
     
