@@ -23,7 +23,7 @@ struct DetailView: View {
             }
             
             ForEach(statistics) { statistic in
-                if statistic.league?.id == viewModel.selectedLeague?.id {
+                if viewModel.leagueSelection.contains(statistic.league?.id) {
                     ScrollView {
                         Text("General Statistics").bold()
                         if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
