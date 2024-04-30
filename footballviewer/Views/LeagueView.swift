@@ -11,9 +11,9 @@ import SwiftUI
 struct LeagueView: View {
     var viewModel: ViewModel
     
-    @Binding var selectedLeagues: Set<League.ID>
-
     var leagues: [League?]
+    
+    @Binding var selectedLeagues: Set<League.ID>
     
     var body: some View {
         List(selection: $selectedLeagues) {

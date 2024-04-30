@@ -52,7 +52,7 @@ struct TableView: View {
                 }
                 
                 Group {
-                    TableColumn("Shots on target") { (player: PlayerResponse) in // this is odd
+                    TableColumn("Shots on target") { (player: PlayerResponse) in
                         Text(String(describing: player.statistics?[0].shots?.on ?? 0))
                     }
                     

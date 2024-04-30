@@ -16,40 +16,14 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
 
-    // MARK: TODO check if all of these variables are used and clean up the data model
     let fileManager = FileManager.default
+    
     let season = 2023 // MARK: TODO make this a variable within settings/preferences?
+    
     @State var preferencesController = PreferencesController()
-    @Published var leagueResp: LeagueJson?
-    @Published var leagues: [League?] = []
-    @Published var squads: SquadJson?
-    @Published var selectedLeague: League? = nil {
-        didSet {
-            if let league = selectedLeague, let leagueId = league.id {
-                loadTeams(leagueId: leagueId)
-                preferencesController.lastLeague = leagueId
-            }
-        }
-    }
-    @Published var teamOnePlayers: [Players]?
-    @Published var teamTwoPlayers: [Players]?
-    @Published var teamOneSelection: Team? = nil {
-        didSet {
-            Task {
-                teamOnePlayers = await loadSquad(teamId: teamOneSelection?.id ?? 0)
-            }
-        }
-    }
-    @Published var teamTwoSelection: Team? = nil {
-        didSet {
-            Task {
-                teamTwoPlayers = await loadSquad(teamId: teamTwoSelection?.id ?? 0)
-            }
-        }
-    }
-
-    // selected 'detail view' player and associated data
+    
     @Published var player: PlayerJson? = nil
+    
     @Published var playerSelection: PlayerResponse.ID? = nil {
         didSet {
             for player in loadedPlayers {
@@ -64,9 +38,17 @@ class ViewModel: ObservableObject {
         }
     }
 
-    private var loadedPlayers: [PlayerJson?] = []
+    //    @Published var selectedLeague: League? = nil {
+    //        didSet {
+    //            if let league = selectedLeague, let leagueId = league.id {
+    //                loadTeams(leagueId: leagueId)
+    //                preferencesController.lastLeague = leagueId
+    //            }
+    //        }
+    //    }
     
     // selected league info
+    @Published var leagues: [League?] = []
     @Published var selectedLeagues: [League?] = []
     @Published var leagueSelection: Set<League.ID> = [] {
         didSet {
@@ -88,7 +70,7 @@ class ViewModel: ObservableObject {
     }
     
     // players that will show up in the table
-//    private var loadedPlayers: [PlayerJson?] = []
+    private var loadedPlayers: [PlayerJson?] = []
     @Published var selectedPlayersTable: [PlayerResponse]
     
     // selected players info (sidebar)
@@ -110,7 +92,6 @@ class ViewModel: ObservableObject {
     @Published var teams: [SquadResponse] = []
     @Published var teamSelection: Set<SquadResponse.ID> = [] {
         didSet {
-            // MARK: TODO populate teams with actual teams
             for teamUUID in teamSelection {
                 for team in teams {
                     if team.id == teamUUID {
@@ -131,7 +112,6 @@ class ViewModel: ObservableObject {
                                         }
                                     }
                                 }
-                                
                                 loadedPlayers.append(playerResp)
                             }
                         }
@@ -361,7 +341,6 @@ class ViewModel: ObservableObject {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
 
                 // MARK: APP SUPPORT STUFF
-                let fileManager = FileManager.default
                 let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
                 let documentURL = appSupportURL.appendingPathComponent("leagues.json")
                 
@@ -408,7 +387,6 @@ class ViewModel: ObservableObject {
                 self.leagues.append(resp.league)
             }
         }
-        self.leagueResp = newData
     }
     
     func loadTeamsByLeagueFromFile(withLeagueId leagueId: Int) async {
