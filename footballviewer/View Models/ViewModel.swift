@@ -88,6 +88,9 @@ class ViewModel: ObservableObject {
     @Published var teamSelection: Set<SquadResponse.ID> = [] {
         didSet {
             print("didSet", teamSelection)
+            
+            // MARK: TODO populate teams with actual teams
+
         }
     }
     
@@ -100,10 +103,16 @@ class ViewModel: ObservableObject {
         didSet {
             print("didSet")
             
-            for team in teams {
-                
+//            for team in teams {
+//                Task {
+//                    var squadPlayers = await loadSquad(teamId: team.team?.id ?? 0)
+//                    
+//                    for player in squadPlayers {
+//                        players.append(player)
+//                    }
+//                }
+//            }
 
-            }
         }
     }
     
@@ -226,6 +235,28 @@ class ViewModel: ObservableObject {
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(SquadJson.self, from: data)
+                
+                print(newData)
+                
+                // loadTeamsByLeagueFromFile
+                
+//                // MARK: APP SUPPORT STUFF
+//                let fileManager = FileManager.default
+//                let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+//                let documentURL = appSupportURL.appendingPathComponent("teams/test.json")
+//
+//                let encoder = JSONEncoder()
+//                do {
+//                    let encodedData = try encoder.encode(newData)
+//                    do {
+//                        try encodedData.write(to: documentURL)
+//                    }
+//                    catch {
+//                        print("error while writing encoded data: ", error)
+//                    }
+//                }
+
+                // MARK: returning stuff
                 await MainActor.run {
 //                    self.squads = newData
                     
