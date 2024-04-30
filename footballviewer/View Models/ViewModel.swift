@@ -117,6 +117,10 @@ class ViewModel: ObservableObject {
                         Task {
                             let squadPlayers = await loadSquad(teamId: team.team?.id ?? 0)
 
+                            await MainActor.run {
+                                self.players = []
+                            }
+
                             for player in squadPlayers {
                                 let playerResp = await loadPlayerById(withId: player.id ?? 0, withSeasonId: season)
                                 
