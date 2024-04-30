@@ -36,7 +36,7 @@ struct ContentView: View {
 
                 TeamView(viewModel: viewModel, selectedTeams: $viewModel.teamSelection, leagues: viewModel.leagues, teams: viewModel.teams)
 
-                PlayerView()
+                PlayerView(viewModel: viewModel, players: viewModel.players, selectedPlayers: $viewModel.selectedPlayers)
                 
 //                    Text("Teams")
 //                    if let squads = viewModel.squads, let response = squads.response {
@@ -141,7 +141,6 @@ struct ContentView: View {
 //                    }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.white)
         } content: {
             TableView(viewModel: viewModel, players: viewModel.players)
         } detail: {

@@ -45,10 +45,6 @@ class ViewModel: ObservableObject {
             }
         }
     }
-    @Published var players: [PlayerResponse]
-        
-    // players that will show up in the table
-    private var loadedPlayers: [PlayerJson?] = []
 
     // selected 'detail view' player and associated data
     @Published var player: PlayerJson? = nil
@@ -95,10 +91,19 @@ class ViewModel: ObservableObject {
         }
     }
     
+    // players that will show up in the table
+    private var loadedPlayers: [PlayerJson?] = []
+    
     // selected players info (sidebar)
+    @Published var players: [PlayerResponse]
     @Published var selectedPlayers: Set<PlayerResponse.ID> = [] {
         didSet {
             print("didSet")
+            
+            for team in teams {
+                
+
+            }
         }
     }
     
