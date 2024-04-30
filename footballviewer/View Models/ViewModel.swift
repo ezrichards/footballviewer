@@ -152,31 +152,6 @@ class ViewModel: ObservableObject {
 //            }
 //        }
 //        loadTeams(leagueId: preferencesController.lastLeague)
-        
-        // MARK: TODO testing code only; query and cache all or most players
-//        Task {
-//            let p1 = await loadPlayerById(withId: 1485, withSeasonId: season)
-//            let p2 = await loadPlayerById(withId: 37127, withSeasonId: season)
-//            let p3 = await loadPlayerById(withId: 629, withSeasonId: season)
-//
-//            loadedPlayers.append(p1)
-//            loadedPlayers.append(p2)
-//            loadedPlayers.append(p3)
-//
-//            await MainActor.run {
-//                if let p1 = p1, let resp = p1.response {
-//                    players.append(resp[0])
-//                }
-//                
-//                if let p2 = p2, let resp = p2.response {
-//                    players.append(resp[0])
-//                }
-//                
-//                if let p3 = p3, let resp = p3.response {
-//                    players.append(resp[0])
-//                }
-//            }
-//        }
     }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
@@ -185,7 +160,6 @@ class ViewModel: ObservableObject {
         let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
         
         if fileManager.fileExists(atPath: documentURL.path) {
-//            print("Single player file exists, loading from cached file..")
             let resp = loadPlayerByIdFromFile(withId: id)
             return resp
         }
@@ -242,10 +216,7 @@ class ViewModel: ObservableObject {
         let documentURL = appSupportURL.appendingPathComponent("players-\(id).json")
         
         if fileManager.fileExists(atPath: documentURL.path) {
-            print("Squad file exists, loading from cached file..")
-
-            let resp = loadPlayersByTeamFromFile(withTeamId: id)
-            return resp
+            return loadPlayersByTeamFromFile(withTeamId: id)
         }
         else {
             // https://v3.football.api-sports.io/players/squads?team=33
@@ -298,12 +269,8 @@ class ViewModel: ObservableObject {
         // MARK: TODO clean this function up
         let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
-        
-//        print("ABS:", documentURL.path)
-        
+
         if fileManager.fileExists(atPath: documentURL.path) {
-//            print("Team file exists, loading from cached file..")
-            
             Task {
                 await loadTeamsByLeagueFromFile(withLeagueId: id)
             }
@@ -454,7 +421,6 @@ class ViewModel: ObservableObject {
         
         if let newData = newData, let response = newData.response {
             for resp in response {
-//                print("LOADING TEAM \(resp)")
                 await MainActor.run {
                     self.teams.append(resp)
                 }
