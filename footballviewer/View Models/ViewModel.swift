@@ -7,6 +7,7 @@
 //  References Used In File:
 //  https://www.api-football.com/documentation-v3#section/Sample-Scripts/Swift
 //  https://stackoverflow.com/questions/35272712/where-do-i-specify-reloadignoringlocalcachedata-for-nsurlsession-in-swift-2
+//  https://developer.apple.com/documentation/foundation/filemanager/1410277-fileexists
 //
 
 import Foundation
@@ -218,65 +219,79 @@ class ViewModel: ObservableObject {
     }
 
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
-        // https://v3.football.api-sports.io/teams?league=39&season=2023
-        guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
-            print("Could not get URL!")
-            return
+        // MARK: TODO clean this function up
+        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
+        
+//        print("ABS:", documentURL.path)
+        
+        if fileManager.fileExists(atPath: documentURL.path) {
+            print("Team file exists, loading from cached file..")
+            
+            Task {
+                await loadTeamsByLeagueFromFile(withLeagueId: id)
+            }
         }
-
-        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
-        request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
-        request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
-        request.httpMethod = "GET"
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let decoder = JSONDecoder()
+        else {
+            print("Team file does not exist, querying..")
+            
+            // https://v3.football.api-sports.io/teams?league=39&season=2023
+            guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
+                print("Could not get URL!")
+                return
+            }
+            
+            var request = URLRequest(url: url, timeoutInterval: Double.infinity)
+            request.addValue(preferencesController.apiKey, forHTTPHeaderField: "x-rapidapi-key")
+            request.addValue("v3.football.api-sports.io", forHTTPHeaderField: "x-rapidapi-host")
+            request.httpMethod = "GET"
+            request.cachePolicy = .reloadIgnoringLocalCacheData
+            
             do {
-                let newData = try decoder.decode(SquadJson.self, from: data)
-                
-                print(newData)
-                
-                // loadTeamsByLeagueFromFile
-                
-//                // MARK: APP SUPPORT STUFF
-//                let fileManager = FileManager.default
-//                let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-//                let documentURL = appSupportURL.appendingPathComponent("teams/test.json")
-//
-//                let encoder = JSONEncoder()
-//                do {
-//                    let encodedData = try encoder.encode(newData)
-//                    do {
-//                        try encodedData.write(to: documentURL)
-//                    }
-//                    catch {
-//                        print("error while writing encoded data: ", error)
-//                    }
-//                }
-
-                // MARK: returning stuff
-                await MainActor.run {
-//                    self.squads = newData
+                let (data, _) = try await URLSession.shared.data(for: request)
+                let decoder = JSONDecoder()
+                do {
+                    let newData = try decoder.decode(SquadJson.self, from: data)
                     
-                    // MARK: TODO new teams code
-                    if let resp = newData.response {
-                        for response in resp {
-                            if !teams.contains(where: { $0.id == response.id }) {
-                                self.teams.append(response)
-//                                print("ADDED \(response)")
-                            }
+//                    print(newData)
+                    
+                    // MARK: APP SUPPORT STUFF
+                    let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+                    let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
+    
+                    let encoder = JSONEncoder()
+                    do {
+                        let encodedData = try encoder.encode(newData)
+                        do {
+                            try encodedData.write(to: documentURL)
+                        }
+                        catch {
+                            print("error while writing encoded data: ", error)
                         }
                     }
-//                    self.teams.append(newData.response?[0])
                     
+                    // MARK: returning stuff
+                    await MainActor.run {
+                        //                    self.squads = newData
+                        
+                        // MARK: TODO new teams code
+                        if let resp = newData.response {
+                            for response in resp {
+                                if !teams.contains(where: { $0.id == response.id }) {
+                                    self.teams.append(response)
+                                    //                                print("ADDED \(response)")
+                                }
+                            }
+                        }
+                        //                    self.teams.append(newData.response?[0])
+                        
+                    }
+                } catch {
+                    print("Error decoding squad:", error)
                 }
             } catch {
-                print("Error decoding squad:", error)
+                print("Error with URLSession:", error)
             }
-        } catch {
-            print("Error with URLSession:", error)
         }
     }
 
@@ -348,6 +363,29 @@ class ViewModel: ObservableObject {
         }
         self.leagueResp = newData
     }
+    
+    func loadTeamsByLeagueFromFile(withLeagueId leagueId: Int) async {
+        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let documentURL = appSupportURL.appendingPathComponent("teams-\(leagueId).json")
+        
+        guard let contentData = try? Data(contentsOf: documentURL) else {
+            print("Error opening file at:", documentURL.description)
+            return
+        }
+        
+        let decoder = JSONDecoder()
+        let newData = try? decoder.decode(SquadJson.self, from: contentData)
+        
+        if let newData = newData, let response = newData.response {
+            for resp in response {
+//                print("LOADING TEAM \(resp)")
+                await MainActor.run {
+                    self.teams.append(resp)
+                }
+            }
+        }
+    }
+    
     
     func loadTeams(leagueId: Int) {
         Task {
