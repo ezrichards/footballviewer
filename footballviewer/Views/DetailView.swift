@@ -3,6 +3,8 @@
 //  FootballViewer
 //
 //  Created by Ethan Richards on 4/28/24.
+//   https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
+//  https://www.hackingwithswift.com/quick-start/swiftui/how-to-allow-row-selection-in-a-list
 //
 
 import SwiftUI
@@ -17,9 +19,9 @@ struct DetailView: View {
 
             if let photo = response.player.photo {
                 AsyncImage(url: URL(string: photo))
-                Text("\(response.player.name!)")
-                Text("Age: \(response.player.age!)")
-                Text("Nationality: \(response.player.nationality!)")
+                Text("\(response.player.name ?? "")")
+                Text("Age: \(response.player.age ?? 0)")
+                Text("Nationality: \(response.player.nationality ?? "")")
             }
             
             ForEach(statistics) { statistic in
