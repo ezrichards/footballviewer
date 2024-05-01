@@ -152,7 +152,7 @@ class ViewModel: ObservableObject {
             return resp
         }
         else {
-            print("Querying single player \(id)..")
+//            print("Querying single player \(id)..")
             
             // https://v3.football.api-sports.io/players?id=909&season=2023
             guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
