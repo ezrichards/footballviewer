@@ -17,6 +17,8 @@ struct TableView: View {
 
     @Binding var selection: PlayerResponse.ID?
     
+//    @State private var sortOrder: [KeyPathComparator<PlayerResponse>] = [.init(\.player.name)]
+    
     var body: some View {
         VSplitView {
             Table(players, selection: $selection) {
