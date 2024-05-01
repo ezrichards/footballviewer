@@ -237,11 +237,7 @@ class ViewModel: ObservableObject {
         // MARK: TODO clean this function up
         let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
 
-        print("calling loadTeams on withLeagueId")
-        
         if FileManager.default.fileExists(atPath: documentURL.path) {
-            print("Loaded teams by league from file")
-            
             Task {
                 await loadTeamsByLeagueFromFile(withLeagueId: id)
             }
