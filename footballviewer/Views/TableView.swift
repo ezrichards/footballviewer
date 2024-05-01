@@ -21,11 +21,14 @@ struct TableView: View {
         VSplitView {
             Table(players, selection: $selection) {
                 Group {
-                    TableColumn("Name", value: \PlayerResponse.player.name!)
-                    TableColumn("Age") {
-                        Text(String(describing: $0.player.age!))
+                    TableColumn("Name") { (player: PlayerResponse) in
+                        Text(player.player.name ?? "")
                     }
                     
+                    TableColumn("Age") {
+                        Text(String(describing: $0.player.age ?? 0))
+                    }
+
                     TableColumn("Position") {
                         Text(String(describing: $0.statistics?[0].games?.position ?? ""))
                     }
