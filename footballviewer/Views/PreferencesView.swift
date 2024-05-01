@@ -23,6 +23,9 @@ struct PreferencesView: View {
             
             Text("API Key")
             TextField("apiKey", text: $preferencesController.apiKey)
+            
+            Text("Season")
+            TextField("season", value: $preferencesController.season, formatter: NumberFormatter())
         }
         .padding()
     }

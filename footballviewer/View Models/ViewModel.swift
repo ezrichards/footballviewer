@@ -15,13 +15,13 @@ import Foundation
 import SwiftUI
 
 class ViewModel: ObservableObject {
-
-    let fileManager = FileManager.default
     
-    let season = 2023 // MARK: TODO make this a variable within settings/preferences?
+    let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+    
+    var season = 2023
     
     @State var preferencesController = PreferencesController()
-    
+
     @Published var player: PlayerJson? = nil
     
     @Published var playerSelection: PlayerResponse.ID? = nil {
@@ -129,6 +129,8 @@ class ViewModel: ObservableObject {
         players = []
         selectedPlayersTable = []
         
+        season = preferencesController.season
+        
         loadLeaguesFromFile()
 //        if let responses = leagueResp?.response {
 //            for response in responses {
@@ -144,10 +146,9 @@ class ViewModel: ObservableObject {
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
         // MARK: TODO clean this function up
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
         
-        if fileManager.fileExists(atPath: documentURL.path) {
+        if FileManager.default.fileExists(atPath: documentURL.path) {
             let resp = loadPlayerByIdFromFile(withId: id)
             return resp
         }
@@ -173,7 +174,6 @@ class ViewModel: ObservableObject {
                     let newData = try decoder.decode(PlayerJson.self, from: data)
                     
                     // MARK: APP SUPPORT STUFF
-                    let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
                     let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
     
                     let encoder = JSONEncoder()
@@ -200,10 +200,9 @@ class ViewModel: ObservableObject {
 
     func loadSquad(teamId id: Int) async -> [Players] {
         // MARK: TODO clean this function up
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("players-\(id).json")
         
-        if fileManager.fileExists(atPath: documentURL.path) {
+        if FileManager.default.fileExists(atPath: documentURL.path) {
             return loadPlayersByTeamFromFile(withTeamId: id)
         }
         else {
@@ -226,7 +225,6 @@ class ViewModel: ObservableObject {
                     let newData = try decoder.decode(SquadJson.self, from: data)
                     
                     // MARK: APP SUPPORT STUFF
-                    let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
                     let documentURL = appSupportURL.appendingPathComponent("players-\(id).json")
     
                     let encoder = JSONEncoder()
@@ -255,17 +253,14 @@ class ViewModel: ObservableObject {
 
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
         // MARK: TODO clean this function up
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
 
-        if fileManager.fileExists(atPath: documentURL.path) {
+        if FileManager.default.fileExists(atPath: documentURL.path) {
             Task {
                 await loadTeamsByLeagueFromFile(withLeagueId: id)
             }
         }
         else {
-//            print("Team file does not exist, querying..")
-            
             // https://v3.football.api-sports.io/teams?league=39&season=2023
             guard let url = URL(string: "https://v3.football.api-sports.io/teams?league=\(id)&season=\(seasonId)") else {
                 print("Could not get URL!")
@@ -283,11 +278,8 @@ class ViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let newData = try decoder.decode(SquadJson.self, from: data)
-                    
-//                    print(newData)
-                    
+
                     // MARK: APP SUPPORT STUFF
-                    let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
                     let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
     
                     let encoder = JSONEncoder()
@@ -300,22 +292,15 @@ class ViewModel: ObservableObject {
                             print("error while writing encoded data: ", error)
                         }
                     }
-                    
-                    // MARK: returning stuff
+
                     await MainActor.run {
-                        //                    self.squads = newData
-                        
-                        // MARK: TODO new teams code
                         if let resp = newData.response {
                             for response in resp {
                                 if !teams.contains(where: { $0.id == response.id }) {
                                     self.teams.append(response)
-                                    //                                print("ADDED \(response)")
                                 }
                             }
                         }
-                        //                    self.teams.append(newData.response?[0])
-                        
                     }
                 } catch {
                     print("Error decoding squad:", error)
@@ -345,7 +330,6 @@ class ViewModel: ObservableObject {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
 
                 // MARK: APP SUPPORT STUFF
-                let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
                 let documentURL = appSupportURL.appendingPathComponent("leagues.json")
                 
                 let encoder = JSONEncoder()
@@ -375,7 +359,6 @@ class ViewModel: ObservableObject {
     }
     
     func loadLeaguesFromFile() {
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("leagues.json")
         
         guard let contentData = try? Data(contentsOf: documentURL) else {
@@ -394,7 +377,6 @@ class ViewModel: ObservableObject {
     }
     
     func loadTeamsByLeagueFromFile(withLeagueId leagueId: Int) async {
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("teams-\(leagueId).json")
         
         guard let contentData = try? Data(contentsOf: documentURL) else {
@@ -415,7 +397,6 @@ class ViewModel: ObservableObject {
     }
     
     func loadPlayersByTeamFromFile(withTeamId teamId: Int) -> [Players] {
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("players-\(teamId).json")
         
         guard let contentData = try? Data(contentsOf: documentURL) else {
@@ -429,7 +410,6 @@ class ViewModel: ObservableObject {
     }
     
     func loadPlayerByIdFromFile(withId id: Int) -> PlayerJson? {
-        let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
         
         guard let contentData = try? Data(contentsOf: documentURL) else {
