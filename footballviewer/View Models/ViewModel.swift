@@ -26,6 +26,10 @@ class ViewModel: ObservableObject {
     
     @Published var playerSelection: PlayerResponse.ID? = nil {
         didSet {
+            if playerSelection == nil {
+                player = nil
+            }
+            
             for player in loadedPlayers {
                 if let player = player, let resp = player.response {
                     for playerResp in resp {

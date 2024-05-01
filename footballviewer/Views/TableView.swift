@@ -14,9 +14,9 @@ struct TableView: View {
     var viewModel: ViewModel
     
     var players: [PlayerResponse]
-    
-    @State private var selection: PlayerResponse.ID? = nil
 
+    @Binding var selection: PlayerResponse.ID?
+    
     var body: some View {
         VSplitView {
             Table(players, selection: $selection) {
@@ -78,12 +78,6 @@ struct TableView: View {
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 400)
-            .onChange(of: selection) {
-                if selection == nil {
-                    viewModel.player = nil
-                }
-                viewModel.playerSelection = selection
-            }
         }
         .frame(maxWidth: .infinity)
     }

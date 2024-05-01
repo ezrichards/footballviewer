@@ -3,6 +3,8 @@
 //  FootballViewer
 //
 //  Created by Ethan Richards on 4/29/24.
+//  References:
+//  https://www.swiftyplace.com/blog/swiftui-search-bar-best-practices-and-examples
 //
 
 import SwiftUI

@@ -22,7 +22,7 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } content: {
-            TableView(viewModel: viewModel, players: viewModel.selectedPlayersTable)
+            TableView(viewModel: viewModel, players: viewModel.selectedPlayersTable, selection: $viewModel.playerSelection)
         } detail: {
             DetailView(viewModel: viewModel, player: viewModel.player)
         }
