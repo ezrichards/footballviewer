@@ -9,6 +9,6 @@ import Foundation
 
 extension UserDefaults {
     static let apiKey = "apiKey"
-    static let lastLeague = "lastLeague"
+    static let lastLeagues = "lastLeagues"
     static let season = "season"
 }

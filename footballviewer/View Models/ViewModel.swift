@@ -9,6 +9,7 @@
 //  https://stackoverflow.com/questions/35272712/where-do-i-specify-reloadignoringlocalcachedata-for-nsurlsession-in-swift-2
 //  https://developer.apple.com/documentation/foundation/filemanager/1410277-fileexists
 //  https://stackoverflow.com/questions/42897844/swift-3-0-filemanager-fileexistsatpath-always-return-false
+//  https://stackoverflow.com/questions/34161786/reduce-array-to-set-in-swift
 //
 
 import Foundation
@@ -41,21 +42,15 @@ class ViewModel: ObservableObject {
             }
         }
     }
-
-    //    @Published var selectedLeague: League? = nil {
-    //        didSet {
-    //            if let league = selectedLeague, let leagueId = league.id {
-    //                loadTeams(leagueId: leagueId)
-    //                preferencesController.lastLeague = leagueId
-    //            }
-    //        }
-    //    }
     
-    // selected league info
     @Published var leagues: [League?] = []
-    @Published var selectedLeagues: [League?] = []
+    
     @Published var leagueSelection: Set<League.ID> = [] {
         didSet {
+            // debounce (maybe bad practice)
+            if leagueSelection == oldValue {
+                return
+            }
             var newLeagues: [League?] = []
             for league in leagues {
                 for selection in leagueSelection {
@@ -64,12 +59,12 @@ class ViewModel: ObservableObject {
                     }
                 }
             }
-            self.selectedLeagues = newLeagues
-            
+
             self.teams = []
             for league in newLeagues {
                 loadTeams(leagueId: league?.id ?? 0)
             }
+            preferencesController.lastLeagues = Array(leagueSelection)
         }
     }
     
@@ -78,7 +73,7 @@ class ViewModel: ObservableObject {
     @Published var selectedPlayersTable: [PlayerResponse]
     
     // selected players info (sidebar)
-    @Published var players: [PlayerResponse]
+    @Published var players: [PlayerResponse] = []
     @Published var selectedPlayers: Set<PlayerResponse.ID> = [] {
         didSet {
             self.selectedPlayersTable = []
@@ -126,22 +121,14 @@ class ViewModel: ObservableObject {
     }
     
     init() {
-        players = []
         selectedPlayersTable = []
         
         season = preferencesController.season
         
         loadLeaguesFromFile()
-//        if let responses = leagueResp?.response {
-//            for response in responses {
-//                if let league = response.league {
-//                    if league.id == preferencesController.lastLeague {
-//                        selectedLeague = response.league
-//                    }
-//                }
-//            }
-//        }
-//        loadTeams(leagueId: preferencesController.lastLeague)
+        
+        // restore last leagues selected
+        leagueSelection = Set(preferencesController.lastLeagues.map { $0 })
     }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
@@ -149,12 +136,9 @@ class ViewModel: ObservableObject {
         let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
         
         if FileManager.default.fileExists(atPath: documentURL.path) {
-            let resp = loadPlayerByIdFromFile(withId: id)
-            return resp
+            return loadPlayerByIdFromFile(withId: id)
         }
         else {
-//            print("Querying single player \(id)..")
-            
             // https://v3.football.api-sports.io/players?id=909&season=2023
             guard let url = URL(string: "https://v3.football.api-sports.io/players?id=\(id)&season=\(seasonId)") else {
                 print("Could not get URL!")
@@ -246,8 +230,6 @@ class ViewModel: ObservableObject {
                 print("Error with URLSession:", error)
             }
         }
-        
-        print("GOT HERE AND RETURNED NONE")
         return []
     }
 
@@ -255,7 +237,11 @@ class ViewModel: ObservableObject {
         // MARK: TODO clean this function up
         let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
 
+        print("calling loadTeams on withLeagueId")
+        
         if FileManager.default.fileExists(atPath: documentURL.path) {
+            print("Loaded teams by league from file")
+            
             Task {
                 await loadTeamsByLeagueFromFile(withLeagueId: id)
             }
