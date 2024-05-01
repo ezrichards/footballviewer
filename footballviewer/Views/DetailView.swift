@@ -18,7 +18,11 @@ struct DetailView: View {
         if let playerOne = player, let response = playerOne.response?.first, let statistics = response.statistics {
 
             if let photo = response.player.photo {
-                AsyncImage(url: URL(string: photo))
+                AsyncImage(url: URL(string: photo)) { image in
+                    image
+                } placeholder: {
+                    ProgressView()
+                }
                 Text("\(response.player.name ?? "")")
                 Text("Age: \(response.player.age ?? 0)")
                 Text("Nationality: \(response.player.nationality ?? "")")

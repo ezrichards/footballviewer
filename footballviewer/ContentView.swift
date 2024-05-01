@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             VStack {
-                LeagueView(viewModel: viewModel, selectedLeagues: $viewModel.leagueSelection, leagues: viewModel.leagues)
+                LeagueView(viewModel: viewModel, leagues: viewModel.leagues, selectedLeagues: $viewModel.leagueSelection)
 
                 TeamView(viewModel: viewModel, selectedTeams: $viewModel.teamSelection, leagues: viewModel.leagues, teams: viewModel.teams)
 
