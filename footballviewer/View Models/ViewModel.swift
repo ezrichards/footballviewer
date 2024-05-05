@@ -51,6 +51,7 @@ class ViewModel: ObservableObject {
             if leagueSelection == oldValue {
                 return
             }
+
             var newLeagues: [League?] = []
             for league in leagues {
                 for selection in leagueSelection {
@@ -128,11 +129,27 @@ class ViewModel: ObservableObject {
         loadLeaguesFromFile()
         
         // restore last leagues selected
-        leagueSelection = Set(preferencesController.lastLeagues.map { $0 })
+//        leagueSelection = Set(preferencesController.lastLeagues.map { $0 })
+    }
+
+    /// Saves data to a given file by name in application support
+    func cacheData<T: Encodable>(fileName: String, data: T) {
+        let documentURL = appSupportURL.appendingPathComponent(fileName)
+        let encoder = JSONEncoder()
+        do {
+            let encodedData = try encoder.encode(data)
+            do {
+                try encodedData.write(to: documentURL)
+            }
+            catch {
+                print("Error while writing encoded data:", error)
+            }
+        } catch {
+            print("Error encoding data to \(fileName):", error)
+        }
     }
 
     func loadPlayerById(withId id: Int, withSeasonId seasonId: Int) async -> PlayerJson? {
-        // MARK: TODO clean this function up
         let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
         
         if FileManager.default.fileExists(atPath: documentURL.path) {
@@ -156,21 +173,7 @@ class ViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let newData = try decoder.decode(PlayerJson.self, from: data)
-                    
-                    // MARK: APP SUPPORT STUFF
-                    let documentURL = appSupportURL.appendingPathComponent("player-\(id).json")
-    
-                    let encoder = JSONEncoder()
-                    do {
-                        let encodedData = try encoder.encode(newData)
-                        do {
-                            try encodedData.write(to: documentURL)
-                        }
-                        catch {
-                            print("error while writing encoded data: ", error)
-                        }
-                    }
-                    
+                    cacheData(fileName: "player-\(id).json", data: newData)
                     return newData
                 } catch {
                     print("Error decoding squad:", error)
@@ -183,9 +186,8 @@ class ViewModel: ObservableObject {
     }
 
     func loadSquad(teamId id: Int) async -> [Players] {
-        // MARK: TODO clean this function up
         let documentURL = appSupportURL.appendingPathComponent("players-\(id).json")
-        
+
         if FileManager.default.fileExists(atPath: documentURL.path) {
             return loadPlayersByTeamFromFile(withTeamId: id)
         }
@@ -207,21 +209,7 @@ class ViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let newData = try decoder.decode(SquadJson.self, from: data)
-                    
-                    // MARK: APP SUPPORT STUFF
-                    let documentURL = appSupportURL.appendingPathComponent("players-\(id).json")
-    
-                    let encoder = JSONEncoder()
-                    do {
-                        let encodedData = try encoder.encode(newData)
-                        do {
-                            try encodedData.write(to: documentURL)
-                        }
-                        catch {
-                            print("error while writing encoded data: ", error)
-                        }
-                    }
-                    
+                    cacheData(fileName: "players-\(id).json", data: newData)
                     return newData.response?.first?.players ?? []
                 } catch {
                     print("Error decoding squad:", error)
@@ -234,7 +222,6 @@ class ViewModel: ObservableObject {
     }
 
     func loadTeams(withLeagueId id: Int, withSeasonId seasonId: Int) async {
-        // MARK: TODO clean this function up
         let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
 
         if FileManager.default.fileExists(atPath: documentURL.path) {
@@ -260,20 +247,7 @@ class ViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let newData = try decoder.decode(SquadJson.self, from: data)
-
-                    // MARK: APP SUPPORT STUFF
-                    let documentURL = appSupportURL.appendingPathComponent("teams-\(id).json")
-    
-                    let encoder = JSONEncoder()
-                    do {
-                        let encodedData = try encoder.encode(newData)
-                        do {
-                            try encodedData.write(to: documentURL)
-                        }
-                        catch {
-                            print("error while writing encoded data: ", error)
-                        }
-                    }
+                    cacheData(fileName: "teams-\(id).json", data: newData)
 
                     await MainActor.run {
                         if let resp = newData.response {
@@ -310,21 +284,8 @@ class ViewModel: ObservableObject {
             let decoder = JSONDecoder()
             do {
                 let newData = try decoder.decode(LeagueJson.self, from: data)
+                cacheData(fileName: "leagues.json", data: newData)
 
-                // MARK: APP SUPPORT STUFF
-                let documentURL = appSupportURL.appendingPathComponent("leagues.json")
-                
-                let encoder = JSONEncoder()
-                do {
-                    let encodedData = try encoder.encode(newData)
-                    do {
-                        try encodedData.write(to: documentURL)
-                    }
-                    catch {
-                        print("error while writing encoded data: ", error)
-                    }
-                }
-                
                 await MainActor.run {
                     if let response = newData.response {
                         for resp in response {
