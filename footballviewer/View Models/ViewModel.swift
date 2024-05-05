@@ -88,6 +88,12 @@ class ViewModel: ObservableObject {
         }
     }
     
+    @Published var sortOrder: [KeyPathComparator<PlayerResponse>] = [.init(\PlayerResponse.player.name, order: .forward), .init(\PlayerResponse.player.age, order: .forward), .init(\PlayerResponse.statistics[0].games.position, order: .forward), .init(\PlayerResponse.statistics[0].games.appearences, order: .forward), .init(\PlayerResponse.statistics[0].games.appearences, order: .forward), .init(\PlayerResponse.statistics[0].goals.total, order: .forward), .init(\PlayerResponse.statistics[0].goals.assists, order: .forward), .init(\PlayerResponse.statistics[0].dribbles.success, order: .forward), .init(\PlayerResponse.statistics[0].shots.total, order: .forward), .init(\PlayerResponse.statistics[0].shots.on, order: .forward), .init(\PlayerResponse.statistics[0].passes.total, order: .forward), .init(\PlayerResponse.statistics[0].passes.key, order: .forward), .init(\PlayerResponse.statistics[0].tackles.total, order: .forward), .init(\PlayerResponse.statistics[0].tackles.blocks, order: .forward), .init(\PlayerResponse.statistics[0].tackles.interceptions, order: .forward)] {
+        didSet {
+            self.selectedPlayersTable.sort(using: sortOrder)
+        }
+    }
+    
     // selected team info
     @Published var teams: [SquadResponse] = []
     @Published var teamSelection: Set<SquadResponse.ID> = [] {
@@ -176,7 +182,7 @@ class ViewModel: ObservableObject {
                     cacheData(fileName: "player-\(id).json", data: newData)
                     return newData
                 } catch {
-                    print("Error decoding squad:", error)
+                    print("Error decoding player by id \(id):", error)
                 }
             } catch {
                 print("Error with URLSession:", error)
@@ -259,7 +265,7 @@ class ViewModel: ObservableObject {
                         }
                     }
                 } catch {
-                    print("Error decoding squad:", error)
+                    print("Error decoding teams:", error)
                 }
             } catch {
                 print("Error with URLSession:", error)
@@ -294,7 +300,7 @@ class ViewModel: ObservableObject {
                     }
                 }
             } catch {
-                print("Error decoding squad:", error)
+                print("Error decoding leagues:", error)
             }
         } catch {
             print("Error with URLSession:", error)
@@ -361,8 +367,14 @@ class ViewModel: ObservableObject {
         }
         let decoder = JSONDecoder()
         
-        let newData = try? decoder.decode(PlayerJson.self, from: contentData)
-        return newData
+        do {
+            let newData = try decoder.decode(PlayerJson.self, from: contentData)
+            return newData
+        }
+        catch {
+            print("Error decoding player \(id) from file:", error)
+        }
+        return nil
     }
     
     func loadTeams(leagueId: Int) {

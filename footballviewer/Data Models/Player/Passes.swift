@@ -13,9 +13,9 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Passes : Codable {
-	let total : Int?
-	let key : Int?
-	let accuracy : Int?
+	let total : Int
+	let key : Int
+	let accuracy : Int
 
 	enum CodingKeys: String, CodingKey {
 
@@ -26,9 +26,9 @@ struct Passes : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		total = try values.decodeIfPresent(Int.self, forKey: .total)
-		key = try values.decodeIfPresent(Int.self, forKey: .key)
-		accuracy = try values.decodeIfPresent(Int.self, forKey: .accuracy)
+        total = try values.decodeIfPresent(Int.self, forKey: .total) ?? 0
+		key = try values.decodeIfPresent(Int.self, forKey: .key) ?? 0
+		accuracy = try values.decodeIfPresent(Int.self, forKey: .accuracy) ?? 0
 	}
 
 }

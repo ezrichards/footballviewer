@@ -13,11 +13,11 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Games : Codable {
-	let appearences : Int?
+	let appearences : Int
 	let lineups : Int?
 	let minutes : Int?
 	let number : String?
-	let position : String?
+	let position : String
 	let rating : String?
 	let captain : Bool?
 
@@ -34,11 +34,11 @@ struct Games : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		appearences = try values.decodeIfPresent(Int.self, forKey: .appearences)
+		appearences = try values.decodeIfPresent(Int.self, forKey: .appearences) ?? 0
 		lineups = try values.decodeIfPresent(Int.self, forKey: .lineups)
 		minutes = try values.decodeIfPresent(Int.self, forKey: .minutes)
 		number = try values.decodeIfPresent(String.self, forKey: .number)
-		position = try values.decodeIfPresent(String.self, forKey: .position)
+		position = try values.decode(String.self, forKey: .position)
 		rating = try values.decodeIfPresent(String.self, forKey: .rating)
 		captain = try values.decodeIfPresent(Bool.self, forKey: .captain)
 	}

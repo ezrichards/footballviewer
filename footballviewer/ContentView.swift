@@ -27,7 +27,7 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } detail: {
-            TableView(viewModel: viewModel, players: viewModel.selectedPlayersTable, selection: $viewModel.playerSelection)
+            TableView(viewModel: viewModel, players: viewModel.selectedPlayersTable, selection: $viewModel.playerSelection, sortOrder: $viewModel.sortOrder)
         }.inspector(isPresented: $visibility_inspector) {
             DetailView(viewModel: viewModel, player: viewModel.player)
                 .padding()

@@ -13,8 +13,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Shots : Codable {
-	let total : Int?
-	let on : Int?
+	let total : Int
+	let on : Int
 
 	enum CodingKeys: String, CodingKey {
 
@@ -24,8 +24,8 @@ struct Shots : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		total = try values.decodeIfPresent(Int.self, forKey: .total)
-		on = try values.decodeIfPresent(Int.self, forKey: .on)
+		total = try values.decodeIfPresent(Int.self, forKey: .total) ?? 0
+		on = try values.decodeIfPresent(Int.self, forKey: .on) ?? 0
 	}
 
 }

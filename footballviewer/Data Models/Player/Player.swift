@@ -12,12 +12,12 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Player : Codable {
+struct Player : Codable, Identifiable {
 	let id : Int?
-	let name : String?
+	let name : String
 	let firstname : String?
 	let lastname : String?
-	let age : Int?
+	let age : Int
 	let birth : Birth?
 	let nationality : String?
 	let height : String?
@@ -43,10 +43,10 @@ struct Player : Codable {
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
 		id = try values.decodeIfPresent(Int.self, forKey: .id)
-		name = try values.decodeIfPresent(String.self, forKey: .name)
+        name = try values.decode(String.self, forKey: .name)
 		firstname = try values.decodeIfPresent(String.self, forKey: .firstname)
 		lastname = try values.decodeIfPresent(String.self, forKey: .lastname)
-		age = try values.decodeIfPresent(Int.self, forKey: .age)
+        age = try values.decode(Int.self, forKey: .age)
 		birth = try values.decodeIfPresent(Birth.self, forKey: .birth)
 		nationality = try values.decodeIfPresent(String.self, forKey: .nationality)
 		height = try values.decodeIfPresent(String.self, forKey: .height)

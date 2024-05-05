@@ -16,14 +16,14 @@ struct Statistics : Codable, Identifiable {
     let id = UUID()
 	let team : Team?
 	let league : League?
-	let games : Games?
+	let games : Games
 	let substitutes : Substitutes?
-	let shots : Shots?
-	let goals : Goals?
-	let passes : Passes?
-	let tackles : Tackles?
+	let shots : Shots
+	let goals : Goals
+	let passes : Passes
+	let tackles : Tackles
 	let duels : Duels?
-	let dribbles : Dribbles?
+	let dribbles : Dribbles
 	let fouls : Fouls?
 	let cards : Cards?
 	let penalty : Penalty?
@@ -49,14 +49,14 @@ struct Statistics : Codable, Identifiable {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
 		team = try values.decodeIfPresent(Team.self, forKey: .team)
 		league = try values.decodeIfPresent(League.self, forKey: .league)
-		games = try values.decodeIfPresent(Games.self, forKey: .games)
+		games = try values.decode(Games.self, forKey: .games)
 		substitutes = try values.decodeIfPresent(Substitutes.self, forKey: .substitutes)
-		shots = try values.decodeIfPresent(Shots.self, forKey: .shots)
-		goals = try values.decodeIfPresent(Goals.self, forKey: .goals)
-		passes = try values.decodeIfPresent(Passes.self, forKey: .passes)
-		tackles = try values.decodeIfPresent(Tackles.self, forKey: .tackles)
+		shots = try values.decode(Shots.self, forKey: .shots)
+		goals = try values.decode(Goals.self, forKey: .goals)
+		passes = try values.decode(Passes.self, forKey: .passes)
+		tackles = try values.decode(Tackles.self, forKey: .tackles)
 		duels = try values.decodeIfPresent(Duels.self, forKey: .duels)
-		dribbles = try values.decodeIfPresent(Dribbles.self, forKey: .dribbles)
+		dribbles = try values.decode(Dribbles.self, forKey: .dribbles)
 		fouls = try values.decodeIfPresent(Fouls.self, forKey: .fouls)
 		cards = try values.decodeIfPresent(Cards.self, forKey: .cards)
 		penalty = try values.decodeIfPresent(Penalty.self, forKey: .penalty)

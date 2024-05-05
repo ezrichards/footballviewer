@@ -13,9 +13,9 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Goals : Codable {
-	let total : Int?
+	let total : Int
 	let conceded : Int?
-	let assists : Int?
+	let assists : Int
 	let saves : String?
 
 	enum CodingKeys: String, CodingKey {
@@ -28,9 +28,9 @@ struct Goals : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		total = try values.decodeIfPresent(Int.self, forKey: .total)
+		total = try values.decodeIfPresent(Int.self, forKey: .total) ?? 0
 		conceded = try values.decodeIfPresent(Int.self, forKey: .conceded)
-		assists = try values.decodeIfPresent(Int.self, forKey: .assists)
+		assists = try values.decodeIfPresent(Int.self, forKey: .assists) ?? 0
 		saves = try values.decodeIfPresent(String.self, forKey: .saves)
 	}
 

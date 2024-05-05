@@ -21,10 +21,8 @@ struct PlayerView: View {
         
         var filteredPlayers: [PlayerResponse] = []
         for player in players {
-            if let name = player.player.name {
-                if name.lowercased().contains(searchText.lowercased()) {
-                    filteredPlayers.append(player)
-                }
+            if player.player.name.lowercased().contains(searchText.lowercased()) {
+                filteredPlayers.append(player)
             }
         }
         return filteredPlayers

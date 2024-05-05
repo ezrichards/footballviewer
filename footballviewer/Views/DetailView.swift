@@ -15,7 +15,7 @@ struct DetailView: View {
     var player: PlayerJson?
     
     var body: some View {
-        if let playerOne = player, let response = playerOne.response?.first, let statistics = response.statistics {
+        if let playerOne = player, let response = playerOne.response?.first {
 
             if let photo = response.player.photo {
                 AsyncImage(url: URL(string: photo)) { image in
@@ -27,36 +27,31 @@ struct DetailView: View {
             
             ScrollView {
                 VStack {
-                    Text("\(response.player.name ?? "")").bold()
-                    Text("Age: \(response.player.age ?? 0)")
+                    Text("\(response.player.name)").bold()
+                    Text("Age: \(response.player.age)")
                     Text("Nationality: \(response.player.nationality ?? "")")
                 }
                 
                 Spacer()
                 
-                ForEach(statistics) { statistic in
+                ForEach(response.statistics) { statistic in
                     if viewModel.leagueSelection.contains(statistic.league?.id) {
                             Text("General Statistics").bold()
-                            if let games = statistic.games, let rating = games.rating, let appearances = games.appearences, let position = games.position {
-                                Text("Appearances: \(appearances)")
-                                Text("Average Rating: \(rating)")
-                                Text("Position: \(position)")
-                            }
+                            Text("Appearances: \(statistic.games.appearences)")
+                            Text("Average Rating: \(statistic.games.rating)")
+                            Text("Position: \(statistic.games.position)")
+
                             Spacer()
                             
                             Text("Goals/Assists").bold()
-                            if let goals = statistic.goals, let total = goals.total, let assists = goals.assists {
-                                Text("Goals: \(total)")
-                                Text("Assists: \(assists)")
-                            }
+                            Text("Goals: \(statistic.goals.total)")
+                            Text("Assists: \(statistic.goals.assists)")
                             Spacer()
                             
                             Text("Passes").bold()
-                            if let passes = statistic.passes, let total = passes.total, let key = passes.key, let accuracy = passes.accuracy {
-                                Text("Total: \(total)")
-                                Text("Key Passes: \(key)")
-                                Text("Accuracy: \(accuracy)%")
-                            }
+                            Text("Total: \(statistic.passes.total)")
+                            Text("Key Passes: \(statistic.passes.key)")
+                            Text("Accuracy: \(statistic.passes.accuracy)%")
                         }
                     }
             }

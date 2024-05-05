@@ -14,7 +14,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 import Foundation
 struct Dribbles : Codable {
 	let attempts : Int?
-	let success : Int?
+	let success : Int
 	let past : String?
 
 	enum CodingKeys: String, CodingKey {
@@ -27,7 +27,7 @@ struct Dribbles : Codable {
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
 		attempts = try values.decodeIfPresent(Int.self, forKey: .attempts)
-		success = try values.decodeIfPresent(Int.self, forKey: .success)
+		success = try values.decodeIfPresent(Int.self, forKey: .success) ?? 0
 		past = try values.decodeIfPresent(String.self, forKey: .past)
 	}
 

@@ -13,9 +13,9 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct Tackles : Codable {
-	let total : Int?
-	let blocks : Int?
-	let interceptions : Int?
+	let total : Int
+	let blocks : Int
+	let interceptions : Int
 
 	enum CodingKeys: String, CodingKey {
 
@@ -26,9 +26,9 @@ struct Tackles : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		total = try values.decodeIfPresent(Int.self, forKey: .total)
-		blocks = try values.decodeIfPresent(Int.self, forKey: .blocks)
-		interceptions = try values.decodeIfPresent(Int.self, forKey: .interceptions)
+		total = try values.decodeIfPresent(Int.self, forKey: .total) ?? 0
+		blocks = try values.decodeIfPresent(Int.self, forKey: .blocks) ?? 0
+		interceptions = try values.decodeIfPresent(Int.self, forKey: .interceptions) ?? 0
 	}
 
 }
