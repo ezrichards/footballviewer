@@ -9,17 +9,18 @@ import SwiftUI
 
 struct PreferencesView: View {
 
-    @StateObject var viewModel = ViewModel()
+    var viewModel: ViewModel
+    
     @State var preferencesController = PreferencesController()
     
     var body: some View {
         VStack {
-            Button("Re-fetch leagues") {
-                Task {
-                    await viewModel.loadLeagues()
-                }
-            }
-            .padding()
+//            Button("Re-fetch leagues") {
+//                Task {
+//                    await viewModel.loadLeagues()
+//                }
+//            }
+//            .padding()
             
             Text("API Key")
             TextField("apiKey", text: $preferencesController.apiKey)
